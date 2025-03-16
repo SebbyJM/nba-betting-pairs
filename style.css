@@ -1,0 +1,16 @@
+/* Global Font */
+* {
+    font-family: 'Source Code Pro', monospace !important;
+}
+
+/* Data Table Styling */
+.stDataFrame, .stTable, .stMarkdown {
+    font-family: 'Source Code Pro', monospace !important;
+    font-size: 16px !important;
+}
+
+/* Background and Text */
+body {
+    background-color: #121212 !important;
+    color: #ffffff !important;
+}
