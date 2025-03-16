@@ -1,117 +1,108 @@
 import streamlit as st
 import pandas as pd
+import random
 
-# Set up Streamlit page
-st.set_page_config(page_title="Betting Pairs AI", page_icon="🎯", layout="wide")
-
-# Load data function
-@st.cache_data
-def load_data():
-    points = pd.read_csv("AI_Projections_Points.csv")
-    rebounds = pd.read_csv("AI_Projections_Rebounds.csv")
-    assists = pd.read_csv("AI_Projections_Assists.csv")
-
-    # Combine all props
-    df = pd.concat([points, rebounds, assists], ignore_index=True)
-
-    # Convert numeric values and calculate Edge
-    df["AI_Projection"] = pd.to_numeric(df["AI_Projection"], errors="coerce").round(1)
-    df["best_point"] = pd.to_numeric(df["best_point"], errors="coerce").round(1)
-    df["Edge"] = (df["AI_Projection"] - df["best_point"]).round(1)
-
-    # Ensure Rebounds/Assists only appear if line is 4 or more
-    df = df[~((df["category"].isin(["Rebounds", "Assists"])) & (df["best_point"] < 4))]
-
-    # Determine Over/Under recommendation
-    df["Bet Pick"] = df.apply(lambda row: "Over" if row["Edge"] > 0 else "Under", axis=1)
-
-    return df
+# Set page title
+st.set_page_config(page_title="🎯 AI Betting Pairs", page_icon="📊", layout="wide")
 
 # Load data
-df = load_data()
+@st.cache_data
+def load_data():
+    points_df = pd.read_csv("AI_Projections_Points.csv")
+    rebounds_df = pd.read_csv("AI_Projections_Rebounds.csv")
+    assists_df = pd.read_csv("AI_Projections_Assists.csv")
 
-# Select best betting pairs (Limit to 4 & ensure at least one Under)
-def find_betting_pairs(df, num_pairs=4):
-    pairs = []
-    df_sorted = df.sort_values(by="Edge", ascending=False)
+    # Convert columns to numeric
+    for df in [points_df, rebounds_df, assists_df]:
+        df["AI_Projection"] = pd.to_numeric(df["AI_Projection"], errors="coerce").round(1)
+        df["best_point"] = pd.to_numeric(df["best_point"], errors="coerce").round(1)
+        
+        # Ensure "Edge" column exists
+        if "Edge" not in df.columns:
+            df["Edge"] = (df["AI_Projection"] - df["best_point"]).round(1)
+    
+    # Filter valid lines (min 4.0 for rebounds & assists)
+    rebounds_df = rebounds_df[rebounds_df["best_point"] >= 4.0]
+    assists_df = assists_df[assists_df["best_point"] >= 4.0]
 
-    # Separate Over & Under picks
-    over_picks = df_sorted[df_sorted["Bet Pick"] == "Over"]
-    under_picks = df_sorted[df_sorted["Bet Pick"] == "Under"]
+    return points_df, rebounds_df, assists_df
 
-    force_under = True if not under_picks.empty else False  # Require at least one Under if available
+points_df, rebounds_df, assists_df = load_data()
 
-    while len(df_sorted) > 1 and len(pairs) < num_pairs:
-        player1 = df_sorted.iloc[0]  # Strongest Edge player
-        df_sorted = df_sorted.iloc[1:]  # Remove the selected player
+# Function to get best betting pairs
+def get_best_pairs():
+    best_points = points_df.nlargest(10, "Edge")
+    best_rebounds = rebounds_df.nlargest(10, "Edge")
+    best_assists = assists_df.nlargest(10, "Edge")
 
-        # If we haven't picked an Under yet, prioritize one
-        if force_under and player1["Bet Pick"] == "Over" and not under_picks.empty:
-            player2 = under_picks.iloc[0]  # Force an Under pick
-            under_picks = under_picks.iloc[1:]  # Remove from pool
-            force_under = False  # Now we have an Under, so we stop forcing it
-        else:
-            # Otherwise, pick the best available match (Over + Over, Under + Under, Over + Under)
-            for _, player2 in df_sorted.iterrows():
-                if (
-                    player1["player"] != player2["player"]  # Different players
-                    and player1["category"] != player2["category"]  # Different stat type
-                    and (player1["Bet Pick"] != player2["Bet Pick"] or abs(player1["Edge"]) > 2 or abs(player2["Edge"]) > 2)  # Mix or strong Edge
-                ):
-                    df_sorted = df_sorted[df_sorted["player"] != player2["player"]]  # Remove second player from pool
-                    break
-            else:
-                continue  # If no valid pair is found, continue
+    best_pairs = []
 
-        pairs.append((player1, player2))
+    while len(best_points) > 0 and len(best_rebounds) > 0 and len(best_assists) > 0 and len(best_pairs) < 4:
+        datasets = [best_points, best_rebounds, best_assists]
+        random.shuffle(datasets)  # Shuffle dataset order for variety
 
-    return pairs
+        # Pick first player from one dataset
+        player1_df = datasets.pop(random.randint(0, len(datasets) - 1)).sample(1).iloc[0]
+        
+        # Pick second player from another dataset
+        player2_df = datasets.pop(random.randint(0, len(datasets) - 1)).sample(1).iloc[0]
 
-# Generate a more detailed writeup for betting pairs
-def generate_writeup(pair):
-    p1, p2 = pair
-    title = f"🟢 **{p1['player']} {p1['Bet Pick']} {p1['category']} {p1['best_point']}** + **{p2['player']} {p2['Bet Pick']} {p2['category']} {p2['best_point']}**"
+        # Determine best Over/Under bet for each player
+        player1_bet = "Over" if player1_df["Edge"] > 0 else "Under"
+        player2_bet = "Over" if player2_df["Edge"] > 0 else "Under"
 
-    writeup = (
-        f"\n📊 **{p1['player']}** has been consistently **{'exceeding' if p1['Bet Pick'] == 'Over' else 'falling short of'}** "
-        f"their line of **{p1['best_point']}**, averaging **{p1['AI_Projection']}** in the last 10 matchups.\n\n"
-        f"📊 Meanwhile, **{p2['player']}** has shown **{'dominant performance' if p2['Bet Pick'] == 'Over' else 'struggles'}** "
-        f"in the **{p2['category']}** category, with an AI projection of **{p2['AI_Projection']}** vs. their line of **{p2['best_point']}**.\n\n"
-        f"💡 **This pair offers strong value based on AI projections, trends, and matchup insights.**"
+        best_pairs.append({
+            "Player 1": player1_df["player"],
+            "Bet": player1_bet,
+            "Prop 1": player1_df["category"],
+            "Line 1": player1_df["best_point"],
+            "AI Proj 1": player1_df["AI_Projection"],
+            "Edge 1": player1_df["Edge"],
+            "Player 2": player2_df["player"],
+            "Bet": player2_bet,
+            "Prop 2": player2_df["category"],
+            "Line 2": player2_df["best_point"],
+            "AI Proj 2": player2_df["AI_Projection"],
+            "Edge 2": player2_df["Edge"],
+        })
+
+        # Remove selected players from all datasets to avoid repeats
+        best_points = best_points[best_points["player"] != player1_df["player"]]
+        best_rebounds = best_rebounds[best_rebounds["player"] != player1_df["player"]]
+        best_assists = best_assists[best_assists["player"] != player1_df["player"]]
+
+        best_points = best_points[best_points["player"] != player2_df["player"]]
+        best_rebounds = best_rebounds[best_rebounds["player"] != player2_df["player"]]
+        best_assists = best_assists[best_assists["player"] != player2_df["player"]]
+
+    return best_pairs
+
+# Generate betting pairs
+pairs = get_best_pairs()
+
+# Display table
+if pairs:
+    st.dataframe(pd.DataFrame(pairs), use_container_width=True)
+
+# Generate detailed write-ups
+st.write("")
+st.write("### 📊 Betting Insights")
+for pair in pairs:
+    p1_name, p1_bet, p1_prop, p1_line, p1_proj, p1_edge = (
+        pair["Player 1"], pair["Bet"], pair["Prop 1"], pair["Line 1"], pair["AI Proj 1"], pair["Edge 1"]
+    )
+    p2_name, p2_bet, p2_prop, p2_line, p2_proj, p2_edge = (
+        pair["Player 2"], pair["Bet"], pair["Prop 2"], pair["Line 2"], pair["AI Proj 2"], pair["Edge 2"]
     )
 
-    return title, writeup
+    st.write(f"**{p1_name} {p1_bet} {p1_line} {p1_prop} + {p2_name} {p2_bet} {p2_line} {p2_prop}**")
+    
+    # Write-up for Player 1
+    st.write(f"📊 **{p1_name}** has been averaging **{p1_proj}** in the last 10 games, "
+             f"compared to a line of **{p1_line}**. With an edge of **{p1_edge}**, the **{p1_bet}** looks favorable.")
 
-# Get the best betting pairs (Limit 4)
-betting_pairs = find_betting_pairs(df, num_pairs=4)
+    # Write-up for Player 2
+    st.write(f"📊 **{p2_name}** has been recording **{p2_proj}** on average recently, "
+             f"against a set line of **{p2_line}**. The AI projects a **{p2_bet}** as the best value play.")
 
-# --- DISPLAY IN STREAMLIT ---
-st.title("🔗 **Best NBA Betting Pairs**")
-
-if betting_pairs:
-    betting_data = []
-    for pair in betting_pairs:
-        p1, p2 = pair
-        betting_data.append([
-            p1["player"], p1["category"], p1["best_point"], p1["Bet Pick"],
-            p2["player"], p2["category"], p2["best_point"], p2["Bet Pick"]
-        ])
-
-    betting_df = pd.DataFrame(
-        betting_data,
-        columns=["Player 1", "Prop 1", "Line 1", "Bet 1", "Player 2", "Prop 2", "Line 2", "Bet 2"]
-    )
-
-    # Display table with proper spacing
-    st.dataframe(
-        betting_df.style.format({"Line 1": "{:.1f}", "Line 2": "{:.1f}"}).set_properties(**{"margin-bottom": "20px"})
-    )
-
-    # Display write-ups
-    st.subheader("📝 **Why These Pairs?**")
-    for pair in betting_pairs:
-        title, writeup = generate_writeup(pair)
-        st.markdown(f"### {title}\n{writeup}\n\n---\n")  # Adds spacing for better readability
-
-else:
-    st.warning("No strong betting pairs found today.")
+    st.write("---")

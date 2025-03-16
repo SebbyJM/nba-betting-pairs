@@ -1,16 +1,59 @@
-/* Global Font */
-* {
-    font-family: 'Source Code Pro', monospace !important;
-}
-
-/* Data Table Styling */
-.stDataFrame, .stTable, .stMarkdown {
-    font-family: 'Source Code Pro', monospace !important;
-    font-size: 16px !important;
-}
-
-/* Background and Text */
+/* 🌌 GENERAL SITE STYLING */
 body {
-    background-color: #121212 !important;
-    color: #ffffff !important;
+    background-color: #0d0d0d;  /* Deep Black */
+    color: #ffffff;             /* Bright White Text */
+    font-family: 'Source Code Pro', monospace !important;
+}
+
+/* 🖥️ HEADERS & TEXT */
+h1, h2, h3, h4, h5, h6 {
+    color: #00bfff; /* Baby Blue Headers */
+    font-family: 'Source Code Pro', monospace !important;
+}
+
+/* 📊 TABLES & DATA */
+.stDataFrame, .stTable {
+    font-family: 'Source Code Pro', monospace !important;
+    color: white;
+    background-color: #1a1a1a; /* Dark Table Background */
+    border: 1px solid #00bfff; /* Baby Blue Borders */
+}
+
+/* 📌 TABLE HEADERS */
+thead th {
+    color: #00bfff !important;  /* Baby Blue Headers */
+    background-color: #121212 !important; /* Dark Background */
+}
+
+/* 🔹 PLAYER NAMES IN AI PICKS */
+.dataframe td:nth-child(1) {  /* First column (Player Name) */
+    color: #00bfff !important; /* Baby blue */
+    font-weight: bold;
+}
+
+/* 🖤 SIDEBAR NAVIGATION */
+section[data-testid="stSidebar"] {
+    background-color: #121212 !important; /* Dark Gray */
+    color: white !important;
+    border-right: 2px solid #00bfff !important;
+}
+
+/* 🎛 BUTTONS & INTERACTIVITY */
+button {
+    background-color: #00bfff !important;
+    color: #0d0d0d !important;
+    font-weight: bold !important;
+    border-radius: 5px !important;
+}
+
+/* 🔘 INPUT FIELDS */
+input {
+    background-color: #1a1a1a !important;
+    color: white !important;
+    border: 1px solid #00bfff !important;
+}
+
+/* 🔄 SPINNER (LOADING ICON) */
+.css-1dp5vir {
+    color: #00bfff !important;
 }
