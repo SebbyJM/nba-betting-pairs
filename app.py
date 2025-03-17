@@ -8,6 +8,9 @@ df_points = pd.read_csv("Final_Projections_POINTS.csv")
 df_rebounds = pd.read_csv("Final_Projections_REBOUNDS.csv")
 df_assists = pd.read_csv("Final_Projections_ASSISTS.csv")
 
+# Load CS2 data
+df_cs2 = pd.read_csv("SOLAR CS2 AI - Sheet1.csv")
+
 # Ensure category labels are consistent
 df_points["Category"] = "Points"
 df_rebounds["Category"] = "Rebounds"
@@ -25,7 +28,7 @@ def get_best_bet(row):
 
 # --- PLAYER SEARCH FUNCTION ---
 def player_search():
-    st.title("🔍 PLAYER SEARCH")
+    st.title("🏀 NBA PLAYER SEARCH")
     player_name = st.text_input("Enter Player Name:")
 
     if player_name:
@@ -108,44 +111,28 @@ def best_props():
         st.write(f"AI Projection: {row['AI_Projection']:.1f}")
         st.write(f"L10 Avg: {row['L10']:.1f}, H2H Avg: {row['H2H']:.1f}, Best Odds: {best_odds}")
 
-# --- AI 2-MANS FUNCTION (Balanced Over & Unders) ---
-def generate_ai_2mans():
-    st.title("🤖 AI 2-MANS")
+# --- CS2 PLAYER SEARCH FUNCTION ---
+def cs2_player_search():
+    st.title("🎮 CS2 PLAYER SEARCH")
+    player_name = st.text_input("Enter CS2 Player Name:")
 
-    # Filter for Rebounds & Assists only, ensuring Best_Line is at least 4
-    df_filtered = df[(df["Category"].isin(["Rebounds", "Assists"])) & (df["Best_Line"] >= 4)]
+    if player_name:
+        player_data = df_cs2[df_cs2["Player"].str.lower().str.contains(player_name.lower())]
 
-    pairs = []
-    attempts = 0  # Prevent infinite loops
-
-    while len(pairs) < 3 and len(df_filtered) > 1 and attempts < 10:
-        player1 = df_filtered.sample(1).iloc[0]
-        df_filtered = df_filtered[df_filtered["Player"] != player1["Player"]]
-
-        if len(df_filtered) > 0:
-            player2 = df_filtered.sample(1).iloc[0]
-            df_filtered = df_filtered[df_filtered["Player"] != player2["Player"]]
-
-            # Ensure both players have solid statistical backing
-            pairs.append((player1, player2))
-
-        attempts += 1  # Track number of tries
-
-    for i, (player1, player2) in enumerate(pairs, start=1):
-        p1_bet, p1_odds = get_best_bet(player1)
-        p2_bet, p2_odds = get_best_bet(player2)
-
-        st.subheader(f"SLIP {i}")
-        st.write(f"• **{player1['Player']} - {p1_bet} {player1['Best_Line']} {player1['Category']}**")
-        st.write(f"• **{player2['Player']} - {p2_bet} {player2['Best_Line']} {player2['Category']}**")
-
-        # Explanation for why this bet is valuable
-        st.write(f"1️⃣ {p1_bet} at {player1['Best_Line']} with odds **{p1_odds}**. Projection: **{player1['AI_Projection']:.1f}**, L10: **{player1['L10']:.1f}**, H2H: **{player1['H2H']:.1f}**.")
-        st.write(f"2️⃣ {p2_bet} at {player2['Best_Line']} with odds **{p2_odds}**. Projection: **{player2['AI_Projection']:.1f}**, L10: **{player2['L10']:.1f}**, H2H: **{player2['H2H']:.1f}**.")
-        st.write("---")
+        if player_data.empty:
+            st.write("❌ No CS2 player found. Check the name and try again.")
+        else:
+            for _, row in player_data.iterrows():
+                category = "Kills" if "(K)" in row["Player"] else "Headshots"
+                st.write(f"**{row['Player'].replace('(K)', '')} - {category}**")
+                st.write(f"L10 Avg: {row['L10 Avg']:.1f}")
+                st.write(f"Line: {row['Line']:.1f}")
+                st.write(f"Difference (Avg - Line): {row['L10 Avg'] - row['Line']:.1f}")
+                st.write(f"Team: {row['Team']}")
+                st.write("---")
 
 # --- STREAMLIT NAVIGATION ---
-menu = st.sidebar.radio("📂 Select Page", ["Player Search", "Hot & Cold Players", "Best Props Available", "AI 2-Mans"])
+menu = st.sidebar.radio("📂 Select Page", ["Player Search", "Hot & Cold Players", "Best Props Available", "AI 2-Mans", "CS2 Player Search"])
 
 if menu == "Player Search":
     player_search()
@@ -155,3 +142,5 @@ elif menu == "Best Props Available":
     best_props()
 elif menu == "AI 2-Mans":
     generate_ai_2mans()
+elif menu == "CS2 Player Search":
+    cs2_player_search()
