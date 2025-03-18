@@ -19,12 +19,16 @@ df = pd.concat([df_points, df_rebounds, df_assists], ignore_index=True)
 # Load CS2 Data
 df_cs2 = pd.read_csv("SOLAR CS2 AI - Sheet1.csv")
 
-# Function to determine best bet (Over/Under)
 def get_best_bet(row):
-    if row["Edge"] > 0:
-        return "Over", row["Best_Over_Odds"]
+    best_over_odds = row["Best_Over_Odds"]
+    best_under_odds = row["Best_Under_Odds"]
+
+    if row["Edge"] > 0 and best_over_odds <= -110:
+        return "Over", best_over_odds
+    elif row["Edge"] < 0 and best_under_odds <= -110:
+        return "Under", best_under_odds
     else:
-        return "Under", row["Best_Under_Odds"]
+        return "No Bet", None
 
 # --- PLAYER SEARCH FUNCTION ---
 def player_search():
@@ -88,7 +92,6 @@ def hot_cold_players():
             st.write(f"⛄️ **{row['Player']} ({row['Best_Line']} {category})**")
             st.write(explain_performance(row, hot=False))
 
-# --- BEST PROPS FUNCTION ---
 def best_props():
     st.title("💰 VALUE PROPS")
 
@@ -98,20 +101,21 @@ def best_props():
         df.nsmallest(3, "Best_Under_Odds")
     ])["Player"].unique()
 
-    # Find best props, ensuring they are NOT Hot or Cold Players and meet minimum thresholds
-    best_points = df[(df["Category"] == "Points") & (df["Best_Line"] >= 20) & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
-    best_rebounds = df[(df["Category"] == "Rebounds") & (df["Best_Line"] >= 5) & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
-    best_assists = df[(df["Category"] == "Assists") & (df["Best_Line"] >= 4) & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
+    # Select best props **ensuring we get one per category**
+    best_points = df[(df["Category"] == "Points") & (df["Best_Line"] >= 18.5) & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
+    best_rebounds = df[(df["Category"] == "Rebounds") & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
+    best_assists = df[(df["Category"] == "Assists") & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
 
     best_props = pd.concat([best_points, best_rebounds, best_assists])
 
+    # Display results (ensuring at least one per category)
     for _, row in best_props.iterrows():
         over_under, best_odds = get_best_bet(row)
-        st.write(f"• **{row['Player']} - {over_under} {row['Best_Line']} {row['Category']}**")
-        st.write(f"AI Projection: {row['AI_Projection']:.1f}")
-        st.write(f"L10 Avg: {row['L10']:.1f}, H2H Avg: {row['H2H']:.1f}, Best Odds: {best_odds}")
+        if over_under != "No Bet":  # Ensure only strong bets are shown
+            st.write(f"• **{row['Player']} - {over_under} {row['Best_Line']} {row['Category']}**")
+            st.write(f"AI Projection: {row['AI_Projection']:.1f}")
+            st.write(f"L10 Avg: {row['L10']:.1f}, H2H Avg: {row['H2H']:.1f}, Best Odds: {best_odds}")
 
-# --- AI 2-MANS FUNCTION (Balanced Over & Unders) ---
 def generate_ai_2mans():
     st.title("🤖 AI 2-MANS")
 
@@ -129,22 +133,41 @@ def generate_ai_2mans():
             player2 = df_filtered.sample(1).iloc[0]
             df_filtered = df_filtered[df_filtered["Player"] != player2["Player"]]
 
-            # Ensure both players have solid statistical backing
-            pairs.append((player1, player2))
+            # Ensure both players have valid bets
+            p1_bet, p1_odds = get_best_bet(player1)
+            p2_bet, p2_odds = get_best_bet(player2)
+
+            if p1_bet != "No Bet" and p2_bet != "No Bet":
+                pairs.append((player1, player2))
 
         attempts += 1  # Track number of tries
 
-    for i, (player1, player2) in enumerate(pairs, start=1):
-        p1_bet, p1_odds = get_best_bet(player1)
-        p2_bet, p2_odds = get_best_bet(player2)
+    # If fewer than 3 pairs were found, fill the rest with any available bets
+    while len(pairs) < 3 and not df_filtered.empty:
+        player = df_filtered.sample(1).iloc[0]
+        df_filtered = df_filtered[df_filtered["Player"] != player["Player"]]
 
+        p_bet, p_odds = get_best_bet(player)
+        if p_bet != "No Bet":
+            pairs.append((player, None))  # Single player added if no pair found
+
+    for i, pair in enumerate(pairs, start=1):
         st.subheader(f"SLIP {i}")
-        st.write(f"• **{player1['Player']} - {p1_bet} {player1['Best_Line']} {player1['Category']}**")
-        st.write(f"• **{player2['Player']} - {p2_bet} {player2['Best_Line']} {player2['Category']}**")
 
-        # Explanation for why this bet is valuable
-        st.write(f"1️⃣ {p1_bet} at {player1['Best_Line']} with odds **{p1_odds}**. Projection: **{player1['AI_Projection']:.1f}**, L10: **{player1['L10']:.1f}**, H2H: **{player1['H2H']:.1f}**.")
-        st.write(f"2️⃣ {p2_bet} at {player2['Best_Line']} with odds **{p2_odds}**. Projection: **{player2['AI_Projection']:.1f}**, L10: **{player2['L10']:.1f}**, H2H: **{player2['H2H']:.1f}**.")
+        if pair[1] is None:
+            player = pair[0]
+            bet, odds = get_best_bet(player)
+            st.write(f"• **{player['Player']} - {bet} {player['Best_Line']} {player['Category']}**")
+            st.write(f"📊 Odds: **{odds}**, Projection: **{player['AI_Projection']:.1f}**, L10 Avg: **{player['L10']:.1f}**, 23/24 H2H: **{player['H2H']:.1f}**")
+        else:
+            player1, player2 = pair
+            p1_bet, p1_odds = get_best_bet(player1)
+            p2_bet, p2_odds = get_best_bet(player2)
+
+            st.write(f"• **{player1['Player']} - {p1_bet} {player1['Best_Line']} {player1['Category']}**")
+            st.write(f"• **{player2['Player']} - {p2_bet} {player2['Best_Line']} {player2['Category']}**")
+            st.write(f"📊 Odds: **{p1_odds}**, Projection: **{player1['AI_Projection']:.1f}**, L10 Avg: **{player1['L10']:.1f}**, 23/24 H2H: **{player1['H2H']:.1f}**")
+            st.write(f"📊 Odds: **{p2_odds}**, Projection: **{player2['AI_Projection']:.1f}**, L10 Avg: **{player2['L10']:.1f}**, 23/24 H2H: **{player2['H2H']:.1f}**")
         st.write("---")
 
 # --- CS2 PLAYER SEARCH ---

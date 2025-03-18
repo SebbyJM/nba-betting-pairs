@@ -1,43 +1,47 @@
-Alperen Sengun
-Andrew Wiggins
-Austin Reaves
-Bam Adebayo
-Bismack Biyombo
-C.J. McCollum
-Cade Cunningham
-Chris Paul
+A.J. Green
+Al Horford
+Bogdan Bogdanovic
+Brook Lopez
+Cameron Johnson
+D'Angelo Russell
+Damian Lillard
+DaQuan Jeffries
+Darius Garland
+Day'Ron Sharpe
+Derrick Jones
+Derrick White
 description
-Devin Vassell
-Dillon Brooks
-Dorian Finney-Smith
-Fred VanVleet
-Guerschon Yabusele
-Harrison Barnes
-Jabari Smith Jr
-Jalen Duren
-Jalen Green
-Jared Butler
-Jaxson Hayes
-Jeremy Sochan
-Josh Hart
-Julian Champagnie
-Justin Edwards
-Karl-Anthony Towns
-Kel'el Ware
-Luka Doncic
-Mikal Bridges
-Miles McBride
-Nikola Jokic
-OG Anunoby
-Quentin Grimes
-Ricky Council IV
+Donovan Mitchell
+Dyson Daniels
+Evan Mobley
+Gary Trent Jr
+Georges Niang
+Giannis Antetokounmpo
+Ivica Zubac
+Jalen Wilson
+James Harden
+Jarrett Allen
+Jayson Tatum
+Josh Green
+Jrue Holiday
+Kawhi Leonard
+Keon Johnson
+Kevin Porter Jr.
+Kris Dunn
+Kristaps Porzingis
+Kyle Kuzma
+LaMelo Ball
+Mark Williams
+Max Strus
+Mouhamed Gueye
+Nicolas Claxton
+Norman Powell
+Onyeka Okongwu
 Stephen Curry
-Stephon Castle
-Tari Eason
-Tim Hardaway Jr
-Tobias Harris
-Trey Murphy III
-Tyler Herro
-Yves Missi
-Zion Williamson
-
+Taurean Prince
+Terance Mann
+Trae Young
+Trendon Watford
+Tyrese Martin
+Zaccharie Risacher
+Ziaire Williams
