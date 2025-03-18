@@ -27,10 +27,10 @@ st.markdown(
 
         /* Buttons & Text Inputs */
         .stTextInput, .stButton>button {
-            border-radius: 8px;
-            border: 1px solid #89CFF0;
+            border-radius: 4px;
+            border: 3px solid black;
             background-color: black;
-            color: white;
+            color: gray;
         }
         .stButton>button:hover {
             background-color: #89CFF0;
@@ -52,7 +52,6 @@ st.markdown(
 st.markdown(
     """
     <h1 style="text-align: center; font-weight: bold;">
-        <span style="color: #89CFF0;">SOLAR</span> 
         <span style="color: white;">CHEAT THE BOOKS</span> 
         <span style="color: #89CFF0;">AI</span>
     </h1>
@@ -90,7 +89,7 @@ def get_best_bet(row):
 # --- PLAYER SEARCH FUNCTION ---
 def player_search():
     st.title("🏀 NBA SEARCH")
-    player_name = st.text_input("Enter Player Name:")
+    player_name = st.text_input(" Enter Player Name:")
 
     if player_name:
         player_data = df[df["Player"].str.lower() == player_name.lower()]
@@ -231,7 +230,7 @@ def generate_ai_2mans():
 def cs2_player_search():
     st.title("🎮 CS2 SEARCH")
 
-    player_name = st.text_input("Enter CS2 Player Name:")
+    player_name = st.text_input("Enter Player Name:")
 
     if player_name:
         player_data = df_cs2[df_cs2["Player"].str.contains(player_name, case=False, na=False)]
