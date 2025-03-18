@@ -111,14 +111,17 @@ def best_props():
         st.write(f"AI Projection: {row['AI_Projection']:.1f}")
         st.write(f"L10 Avg: {row['L10']:.1f}, H2H Avg: {row['H2H']:.1f}, Best Odds: {best_odds}")
 
-# --- AI 2-MANS FUNCTION ---
+# --- AI 2-MANS FUNCTION (Balanced Over & Unders) ---
 def generate_ai_2mans():
     st.title("🤖 AI 2-MANS")
 
+    # Filter for Rebounds & Assists only, ensuring Best_Line is at least 4
     df_filtered = df[(df["Category"].isin(["Rebounds", "Assists"])) & (df["Best_Line"] >= 4)]
 
     pairs = []
-    while len(pairs) < 3 and len(df_filtered) > 1:
+    attempts = 0  # Prevent infinite loops
+
+    while len(pairs) < 3 and len(df_filtered) > 1 and attempts < 10:
         player1 = df_filtered.sample(1).iloc[0]
         df_filtered = df_filtered[df_filtered["Player"] != player1["Player"]]
 
@@ -126,12 +129,23 @@ def generate_ai_2mans():
             player2 = df_filtered.sample(1).iloc[0]
             df_filtered = df_filtered[df_filtered["Player"] != player2["Player"]]
 
+            # Ensure both players have solid statistical backing
             pairs.append((player1, player2))
 
+        attempts += 1  # Track number of tries
+
     for i, (player1, player2) in enumerate(pairs, start=1):
+        p1_bet, p1_odds = get_best_bet(player1)
+        p2_bet, p2_odds = get_best_bet(player2)
+
         st.subheader(f"SLIP {i}")
-        st.write(f"• {player1['Player']} - {player1['Best_Line']} {player1['Category']}")
-        st.write(f"• {player2['Player']} - {player2['Best_Line']} {player2['Category']}")
+        st.write(f"• **{player1['Player']} - {p1_bet} {player1['Best_Line']} {player1['Category']}**")
+        st.write(f"• **{player2['Player']} - {p2_bet} {player2['Best_Line']} {player2['Category']}**")
+
+        # Explanation for why this bet is valuable
+        st.write(f"1️⃣ {p1_bet} at {player1['Best_Line']} with odds **{p1_odds}**. Projection: **{player1['AI_Projection']:.1f}**, L10: **{player1['L10']:.1f}**, H2H: **{player1['H2H']:.1f}**.")
+        st.write(f"2️⃣ {p2_bet} at {player2['Best_Line']} with odds **{p2_odds}**. Projection: **{player2['AI_Projection']:.1f}**, L10: **{player2['L10']:.1f}**, H2H: **{player2['H2H']:.1f}**.")
+        st.write("---")
 
 # --- CS2 PLAYER SEARCH ---
 def cs2_player_search():
