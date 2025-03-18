@@ -8,9 +8,6 @@ df_points = pd.read_csv("Final_Projections_POINTS.csv")
 df_rebounds = pd.read_csv("Final_Projections_REBOUNDS.csv")
 df_assists = pd.read_csv("Final_Projections_ASSISTS.csv")
 
-# Load CS2 data
-df_cs2 = pd.read_csv("SOLAR CS2 AI - Sheet1.csv")
-
 # Ensure category labels are consistent
 df_points["Category"] = "Points"
 df_rebounds["Category"] = "Rebounds"
@@ -18,6 +15,9 @@ df_assists["Category"] = "Assists"
 
 # Combine all categories
 df = pd.concat([df_points, df_rebounds, df_assists], ignore_index=True)
+
+# Load CS2 Data
+df_cs2 = pd.read_csv("SOLAR CS2 AI - Sheet1.csv")
 
 # Function to determine best bet (Over/Under)
 def get_best_bet(row):
@@ -28,7 +28,7 @@ def get_best_bet(row):
 
 # --- PLAYER SEARCH FUNCTION ---
 def player_search():
-    st.title("🏀 NBA PLAYER SEARCH")
+    st.title("🏀 NBA SEARCH")
     player_name = st.text_input("Enter Player Name:")
 
     if player_name:
@@ -77,7 +77,7 @@ def hot_cold_players():
     for category, player_df in hot_players.items():
         if not player_df.empty:
             row = player_df.iloc[0]
-            st.write(f"🟠 **{row['Player']} ({row['Best_Line']} {category})**")
+            st.write(f"🔥 **{row['Player']} ({row['Best_Line']} {category})**")
             st.write(explain_performance(row, hot=True))
 
     # COLD PLAYERS
@@ -85,7 +85,7 @@ def hot_cold_players():
     for category, player_df in cold_players.items():
         if not player_df.empty:
             row = player_df.iloc[0]
-            st.write(f"🔵 **{row['Player']} ({row['Best_Line']} {category})**")
+            st.write(f"⛄️ **{row['Player']} ({row['Best_Line']} {category})**")
             st.write(explain_performance(row, hot=False))
 
 # --- BEST PROPS FUNCTION ---
@@ -111,36 +111,59 @@ def best_props():
         st.write(f"AI Projection: {row['AI_Projection']:.1f}")
         st.write(f"L10 Avg: {row['L10']:.1f}, H2H Avg: {row['H2H']:.1f}, Best Odds: {best_odds}")
 
-# --- CS2 PLAYER SEARCH FUNCTION ---
+# --- AI 2-MANS FUNCTION ---
+def generate_ai_2mans():
+    st.title("🤖 AI 2-MANS")
+
+    df_filtered = df[(df["Category"].isin(["Rebounds", "Assists"])) & (df["Best_Line"] >= 4)]
+
+    pairs = []
+    while len(pairs) < 3 and len(df_filtered) > 1:
+        player1 = df_filtered.sample(1).iloc[0]
+        df_filtered = df_filtered[df_filtered["Player"] != player1["Player"]]
+
+        if len(df_filtered) > 0:
+            player2 = df_filtered.sample(1).iloc[0]
+            df_filtered = df_filtered[df_filtered["Player"] != player2["Player"]]
+
+            pairs.append((player1, player2))
+
+    for i, (player1, player2) in enumerate(pairs, start=1):
+        st.subheader(f"SLIP {i}")
+        st.write(f"• {player1['Player']} - {player1['Best_Line']} {player1['Category']}")
+        st.write(f"• {player2['Player']} - {player2['Best_Line']} {player2['Category']}")
+
+# --- CS2 PLAYER SEARCH ---
 def cs2_player_search():
-    st.title("🎮 CS2 PLAYER SEARCH")
+    st.title("🎮 CS2 SEARCH")
+
     player_name = st.text_input("Enter CS2 Player Name:")
 
     if player_name:
-        player_data = df_cs2[df_cs2["Player"].str.lower().str.contains(player_name.lower())]
+        player_data = df_cs2[df_cs2["Player"].str.contains(player_name, case=False, na=False)]
 
         if player_data.empty:
             st.write("❌ No CS2 player found. Check the name and try again.")
         else:
-            for _, row in player_data.iterrows():
-                category = "Kills" if "(K)" in row["Player"] else "Headshots"
-                st.write(f"**{row['Player'].replace('(K)', '')} - {category}**")
-                st.write(f"L10 Avg: {row['L10 Avg']:.1f}")
-                st.write(f"Line: {row['Line']:.1f}")
-                st.write(f"Difference (Avg - Line): {row['L10 Avg'] - row['Line']:.1f}")
-                st.write(f"Team: {row['Team']}")
-                st.write("---")
+            kills = player_data[player_data["Player"].str.endswith("(K)")]
+            headshots = player_data[~player_data["Player"].str.endswith("(K)")]
+
+            st.write(f"**{player_name}**")
+            if not kills.empty:
+                st.write(f"🔫 Kills: Avg {kills.iloc[0]['Average']:.1f}, Line {kills.iloc[0]['Line']}")
+            if not headshots.empty:
+                st.write(f"👤 Headshots: Avg {headshots.iloc[0]['Average']:.1f}, Line {headshots.iloc[0]['Line']}")
 
 # --- STREAMLIT NAVIGATION ---
-menu = st.sidebar.radio("📂 Select Page", ["Player Search", "Hot & Cold Players", "Best Props Available", "AI 2-Mans", "CS2 Player Search"])
+menu = st.sidebar.radio("📂 Select Page", ["NBA Search", "Hot & Cold", "Value Props", "AI 2-Mans", "CS2 Search"])
 
-if menu == "Player Search":
+if menu == "NBA Search":
     player_search()
-elif menu == "Hot & Cold Players":
+elif menu == "Hot & Cold":
     hot_cold_players()
-elif menu == "Best Props Available":
+elif menu == "Value Props":
     best_props()
 elif menu == "AI 2-Mans":
     generate_ai_2mans()
-elif menu == "CS2 Player Search":
+elif menu == "CS2 Search":
     cs2_player_search()

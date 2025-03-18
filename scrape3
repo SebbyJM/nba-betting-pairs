@@ -1,0 +1,18 @@
+import pandas as pd
+
+# Google Sheets CSV export URL
+sheet_id = "1wjC0oGEwzIDppcvI245vriYiwmPYqU2HGf_KihOHL9c"
+gid = "1841609155"  # GID for "CS2 Map 1-2 Stats"
+
+csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&gid={gid}"
+
+try:
+    df = pd.read_csv(csv_url, on_bad_lines="skip", dtype=str)
+
+    # Save the cleaned file
+    df.to_csv("cs2_map1_2_stats.csv", index=False)
+
+    print("Data saved to cs2_map1_2_stats.csv")
+
+except Exception as e:
+    print(f"Error reading the CSV: {e}")
