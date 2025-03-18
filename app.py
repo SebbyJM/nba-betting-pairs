@@ -3,6 +3,63 @@ import streamlit as st
 import pandas as pd
 import random
 
+# --- CUSTOM PAGE STYLE ---
+st.markdown(
+    """
+    <style>
+        /* Background color */
+        body, .stApp {
+            background-color: black;
+            color: white;
+        }
+
+        /* Title Styling */
+        .title-text {
+            text-align: center;
+            font-weight: bold;
+            font-size: 36px;
+        }
+        
+        /* Sidebar */
+        .css-1d391kg, .css-18e3th9 {
+            background-color: #111; /* Dark Sidebar */
+        }
+
+        /* Buttons & Text Inputs */
+        .stTextInput, .stButton>button {
+            border-radius: 8px;
+            border: 1px solid #89CFF0;
+            background-color: black;
+            color: white;
+        }
+        .stButton>button:hover {
+            background-color: #89CFF0;
+            color: black;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: gray;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Custom Title (Added at the top)
+st.markdown(
+    """
+    <h1 style="text-align: center; font-weight: bold;">
+        <span style="color: #89CFF0;">SOLAR</span> 
+        <span style="color: white;">CHEAT THE BOOKS</span> 
+        <span style="color: #89CFF0;">AI</span>
+    </h1>
+    """,
+    unsafe_allow_html=True
+)
+
 # Load the final projections
 df_points = pd.read_csv("Final_Projections_POINTS.csv")
 df_rebounds = pd.read_csv("Final_Projections_REBOUNDS.csv")
@@ -204,3 +261,16 @@ elif menu == "AI 2-Mans":
     generate_ai_2mans()
 elif menu == "CS2 Search":
     cs2_player_search()
+
+# Footer (Added at the bottom)
+st.markdown(
+    """
+    <hr>
+    <p style="text-align: center; font-size: 12px; color: gray;">
+        Sharing this site and data will result in immediate loss of access with no refund.<br>
+        Questions?:<br>
+        X: @SolarJenda | Discord: SolarJenda
+    </p>
+    """,
+    unsafe_allow_html=True
+)
