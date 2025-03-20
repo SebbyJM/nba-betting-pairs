@@ -84,7 +84,7 @@ def get_best_bet(row):
     elif row["Edge"] < 0 and best_under_odds <= -110:
         return "Under", best_under_odds
     else:
-        return "No Bet", None
+        return "Fade", None
 
 # --- PLAYER SEARCH FUNCTION ---
 def player_search():
@@ -103,7 +103,6 @@ def player_search():
                 st.write(f"AI Projection: {row['AI_Projection']:.1f}")
                 st.write(f"L10 Avg: {row['L10']:.1f}, H2H Avg: {row['H2H']:.1f}, Best Odds: {best_odds}")
 
-# --- HOT & COLD PLAYERS FUNCTION ---
 def hot_cold_players():
     st.title("📊 HOT & COLD PLAYERS")
 
@@ -121,15 +120,15 @@ def hot_cold_players():
 
     # Select top 1 hot & cold player per category (by L10 vs Line and Odds)
     hot_players = {
-        "Points": df[(df["Category"] == "Points") & (df["L10"] > df["Best_Line"])].nlargest(1, "Best_Over_Odds"),
-        "Rebounds": df[(df["Category"] == "Rebounds") & (df["L10"] > df["Best_Line"])].nlargest(1, "Best_Over_Odds"),
-        "Assists": df[(df["Category"] == "Assists") & (df["L10"] > df["Best_Line"])].nlargest(1, "Best_Over_Odds")
+        "Points": df[(df["Category"] == "Points") & (df["L10"] > df["Best_Line"]) & (df["Best_Line"] >= 20)].nlargest(1, "Best_Over_Odds"),
+        "Rebounds": df[(df["Category"] == "Rebounds") & (df["L10"] > df["Best_Line"]) & (df["Best_Line"] >= 3.5)].nlargest(1, "Best_Over_Odds"),
+        "Assists": df[(df["Category"] == "Assists") & (df["L10"] > df["Best_Line"]) & (df["Best_Line"] >= 3.5)].nlargest(1, "Best_Over_Odds")
     }
 
     cold_players = {
-        "Points": df[(df["Category"] == "Points") & (df["L10"] < df["Best_Line"])].nlargest(1, "Best_Under_Odds"),
-        "Rebounds": df[(df["Category"] == "Rebounds") & (df["L10"] < df["Best_Line"])].nlargest(1, "Best_Under_Odds"),
-        "Assists": df[(df["Category"] == "Assists") & (df["L10"] < df["Best_Line"])].nlargest(1, "Best_Under_Odds")
+        "Points": df[(df["Category"] == "Points") & (df["L10"] < df["Best_Line"]) & (df["Best_Line"] >= 20)].nlargest(1, "Best_Under_Odds"),
+        "Rebounds": df[(df["Category"] == "Rebounds") & (df["L10"] < df["Best_Line"]) & (df["Best_Line"] >= 3.5)].nlargest(1, "Best_Under_Odds"),
+        "Assists": df[(df["Category"] == "Assists") & (df["L10"] < df["Best_Line"]) & (df["Best_Line"] >= 3.5)].nlargest(1, "Best_Under_Odds")
     }
 
     # HOT PLAYERS
@@ -185,15 +184,16 @@ def generate_ai_2mans():
         player1 = df_filtered.sample(1).iloc[0]
         df_filtered = df_filtered[df_filtered["Player"] != player1["Player"]]
 
+        p1_bet, p1_odds = get_best_bet(player1)
+        if p1_bet == "No Bet" or p1_bet.lower() == "fade":
+            continue  # Skip players with No Bet or Fade
+
         if len(df_filtered) > 0:
             player2 = df_filtered.sample(1).iloc[0]
             df_filtered = df_filtered[df_filtered["Player"] != player2["Player"]]
 
-            # Ensure both players have valid bets
-            p1_bet, p1_odds = get_best_bet(player1)
             p2_bet, p2_odds = get_best_bet(player2)
-
-            if p1_bet != "No Bet" and p2_bet != "No Bet":
+            if p2_bet != "No Bet" and p2_bet.lower() != "fade":
                 pairs.append((player1, player2))
 
         attempts += 1  # Track number of tries
@@ -204,7 +204,7 @@ def generate_ai_2mans():
         df_filtered = df_filtered[df_filtered["Player"] != player["Player"]]
 
         p_bet, p_odds = get_best_bet(player)
-        if p_bet != "No Bet":
+        if p_bet != "No Bet" and p_bet.lower() != "fade":
             pairs.append((player, None))  # Single player added if no pair found
 
     for i, pair in enumerate(pairs, start=1):

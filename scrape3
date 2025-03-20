@@ -4,7 +4,7 @@ import pandas as pd
 sheet_id = "1wjC0oGEwzIDppcvI245vriYiwmPYqU2HGf_KihOHL9c"
 gid = "1841609155"  # GID for "CS2 Map 1-2 Stats"
 
-csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&gid={gid}"
+csv_url = f"https://docs.google.com/spreadsheets/d/17ucCgEkd4yUgiuC12jDEp-4q07rI7jkiemUD7A8Bbc0/edit?gid=0#gid=0"
 
 try:
     df = pd.read_csv(csv_url, on_bad_lines="skip", dtype=str)
