@@ -158,8 +158,8 @@ def best_props():
 
     # Select best props **ensuring we get one per category**
     best_points = df[(df["Category"] == "Points") & (df["Best_Line"] >= 18.5) & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
-    best_rebounds = df[(df["Category"] == "Rebounds") & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
-    best_assists = df[(df["Category"] == "Assists") & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
+    best_rebounds = df[(df["Category"] == "Rebounds") & (df["Best_Line"] >= 4.0) & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
+    best_assists = df[(df["Category"] == "Assists") & (df["Best_Line"] >= 4.0) & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
 
     best_props = pd.concat([best_points, best_rebounds, best_assists])
 
