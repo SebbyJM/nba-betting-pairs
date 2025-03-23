@@ -1,31 +1,39 @@
+
 # Force update
 import streamlit as st
 import pandas as pd
 import random
 
-# --- CUSTOM PAGE STYLE ---
-st.markdown(
-    """
+# Hide Streamlit default UI
+st.markdown("""
     <style>
-        /* Background color */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+
+    .card-hover:hover {
+        box-shadow: 0 0 15px #89CFF0;
+        transform: scale(1.01);
+        transition: 0.2s ease-in-out;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Custom styling
+st.markdown("""
+    <style>
         body, .stApp {
             background-color: black;
             color: white;
         }
-
-        /* Title Styling */
         .title-text {
             text-align: center;
             font-weight: bold;
             font-size: 36px;
         }
-        
-        /* Sidebar */
         .css-1d391kg, .css-18e3th9 {
-            background-color: #111; /* Dark Sidebar */
+            background-color: #111;
         }
-
-        /* Buttons & Text Inputs */
         .stTextInput, .stButton>button {
             border-radius: 4px;
             border: 3px solid black;
@@ -36,220 +44,194 @@ st.markdown(
             background-color: #89CFF0;
             color: black;
         }
-        
-        /* Footer */
         .footer {
             text-align: center;
             font-size: 12px;
             color: gray;
         }
     </style>
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
 
-# Custom Title (Added at the top)
-st.markdown(
-    """
+st.markdown("""
     <h1 style="text-align: center; font-weight: bold;">
         <span style="color: white;">CHEAT THE BOOKS</span> 
         <span style="color: #89CFF0;">AI</span>
     </h1>
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
 
-# Load the final projections
+# Load data
 df_points = pd.read_csv("Final_Projections_POINTS.csv")
 df_rebounds = pd.read_csv("Final_Projections_REBOUNDS.csv")
 df_assists = pd.read_csv("Final_Projections_ASSISTS.csv")
+df_cs2 = pd.read_csv("SOLAR CS2 AI - Sheet1.csv")
 
-# Ensure category labels are consistent
 df_points["Category"] = "Points"
 df_rebounds["Category"] = "Rebounds"
 df_assists["Category"] = "Assists"
-
-# Combine all categories
 df = pd.concat([df_points, df_rebounds, df_assists], ignore_index=True)
 
-# Load CS2 Data
-df_cs2 = pd.read_csv("SOLAR CS2 AI - Sheet1.csv")
-
 def get_best_bet(row):
-    best_over_odds = row["Best_Over_Odds"]
-    best_under_odds = row["Best_Under_Odds"]
-
-    if row["Edge"] > 0 and best_over_odds <= -110:
-        return "Over", best_over_odds
-    elif row["Edge"] < 0 and best_under_odds <= -110:
-        return "Under", best_under_odds
+    if row["Edge"] > 0 and row["Best_Over_Odds"] <= -110:
+        return "Over", row["Best_Over_Odds"]
+    elif row["Edge"] < 0 and row["Best_Under_Odds"] <= -110:
+        return "Under", row["Best_Under_Odds"]
     else:
         return "Fade", None
 
-# --- PLAYER SEARCH FUNCTION ---
+
+def calculate_confidence(row, best_odds):
+    edge_score = min(max(abs(row["Edge"]), 0), 1)
+    l10_diff = row["L10"] - row["Best_Line"]
+    l10_score = min(max(l10_diff / row["Best_Line"], 0), 1)
+    odds_score = 1 if best_odds >= -115 else 0.5 if best_odds >= -130 else 0.3
+    confidence = int((edge_score * 0.4 + l10_score * 0.4 + odds_score * 0.2) * 100)
+    return min(max(confidence, 10), 100)
+
+# NBA SEARCH
 def player_search():
     st.title("🏀 NBA SEARCH")
     player_name = st.text_input(" Enter Player Name:")
-
     if player_name:
         player_data = df[df["Player"].str.lower() == player_name.lower()]
-
         if player_data.empty:
-            st.write("❌ No player found. Check the name and try again.")
+            st.write("❌ No player found.")
         else:
             for _, row in player_data.iterrows():
                 over_under, best_odds = get_best_bet(row)
-                st.write(f"**{row['Player']} - {over_under} {row['Best_Line']} {row['Category']}**")
+                st.write(f"**{row['Player']}** - {over_under} {row['Best_Line']} {row['Category']}")
                 st.write(f"AI Projection: {row['AI_Projection']:.1f}")
                 st.write(f"L10 Avg: {row['L10']:.1f}, H2H Avg: {row['H2H']:.1f}, Best Odds: {best_odds}")
 
+# HOT & COLD
 def hot_cold_players():
     st.title("📊 HOT & COLD PLAYERS")
+    def get_performance_change(row): return round(row["L10"] - row["Best_Line"], 1)
+    def explain(row, hot): return (
+        f"Exceeding line by **{get_performance_change(row)}**" if hot else f"Falling short by **{abs(get_performance_change(row))}**"
+    )
 
-    # Function to calculate L10 performance change
-    def get_performance_change(row):
-        return round(row["L10"] - row["Best_Line"], 1)
-
-    # Generate explanation
-    def explain_performance(row, hot=True):
-        change = get_performance_change(row)
-        if hot:
-            return f"Exceeding line by **{change}** in L10 games."
-        else:
-            return f"Struggling to reach the line, falling short by **{abs(change)}**."
-
-    # Select top 1 hot & cold player per category (by L10 vs Line and Odds)
-    hot_players = {
-        "Points": df[(df["Category"] == "Points") & (df["L10"] > df["Best_Line"]) & (df["Best_Line"] >= 20)].nlargest(1, "Best_Over_Odds"),
-        "Rebounds": df[(df["Category"] == "Rebounds") & (df["L10"] > df["Best_Line"]) & (df["Best_Line"] >= 3.5)].nlargest(1, "Best_Over_Odds"),
-        "Assists": df[(df["Category"] == "Assists") & (df["L10"] > df["Best_Line"]) & (df["Best_Line"] >= 3.5)].nlargest(1, "Best_Over_Odds")
+    hot = {
+        "Points": df[(df["Category"] == "Points") & (df["Best_Line"] >= 18.5) & (df["L10"] > df["Best_Line"])].nlargest(1, "Best_Over_Odds"),
+        "Rebounds": df[(df["Category"] == "Rebounds") & (df["Best_Line"] >= 4.0) & (df["L10"] > df["Best_Line"])].nlargest(1, "Best_Over_Odds"),
+        "Assists": df[(df["Category"] == "Assists") & (df["Best_Line"] >= 4.0) & (df["L10"] > df["Best_Line"])].nlargest(1, "Best_Over_Odds")
+    }
+    cold = {
+        "Points": df[(df["Category"] == "Points") & (df["Best_Line"] >= 18.5) & (df["L10"] < df["Best_Line"])].nlargest(1, "Best_Under_Odds"),
+        "Rebounds": df[(df["Category"] == "Rebounds") & (df["Best_Line"] >= 4.0) & (df["L10"] < df["Best_Line"])].nlargest(1, "Best_Under_Odds"),
+        "Assists": df[(df["Category"] == "Assists") & (df["Best_Line"] >= 4.0) & (df["L10"] < df["Best_Line"])].nlargest(1, "Best_Under_Odds")
     }
 
-    cold_players = {
-        "Points": df[(df["Category"] == "Points") & (df["L10"] < df["Best_Line"]) & (df["Best_Line"] >= 20)].nlargest(1, "Best_Under_Odds"),
-        "Rebounds": df[(df["Category"] == "Rebounds") & (df["L10"] < df["Best_Line"]) & (df["Best_Line"] >= 3.5)].nlargest(1, "Best_Under_Odds"),
-        "Assists": df[(df["Category"] == "Assists") & (df["L10"] < df["Best_Line"]) & (df["Best_Line"] >= 3.5)].nlargest(1, "Best_Under_Odds")
-    }
+    with st.expander("🔥 HOT PLAYERS"):
+        for cat, df_ in hot.items():
+            if not df_.empty:
+                row = df_.iloc[0]
+                st.write(f"**{row['Player']}** ({row['Best_Line']} {cat})")
+                st.write(explain(row, True))
 
-    # HOT PLAYERS
-    st.subheader("HOT PLAYERS")
-    for category, player_df in hot_players.items():
-        if not player_df.empty:
-            row = player_df.iloc[0]
-            st.write(f"🔥 **{row['Player']} ({row['Best_Line']} {category})**")
-            st.write(explain_performance(row, hot=True))
+    with st.expander("⛄️ COLD PLAYERS"):
+        for cat, df_ in cold.items():
+            if not df_.empty:
+                row = df_.iloc[0]
+                st.write(f"**{row['Player']}** ({row['Best_Line']} {cat})")
+                st.write(explain(row, False))
 
-    # COLD PLAYERS
-    st.subheader("COLD PLAYERS")
-    for category, player_df in cold_players.items():
-        if not player_df.empty:
-            row = player_df.iloc[0]
-            st.write(f"⛄️ **{row['Player']} ({row['Best_Line']} {category})**")
-            st.write(explain_performance(row, hot=False))
-
+# VALUE PROPS
 def best_props():
     st.title("💰 VALUE PROPS")
-
-    # Exclude Hot & Cold Players from Best Props
-    hot_cold_players_list = pd.concat([
+    excluded = pd.concat([
         df.nlargest(3, "Best_Over_Odds"),
         df.nsmallest(3, "Best_Under_Odds")
     ])["Player"].unique()
 
-    # Select best props **ensuring we get one per category**
-    best_points = df[(df["Category"] == "Points") & (df["Best_Line"] >= 18.5) & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
-    best_rebounds = df[(df["Category"] == "Rebounds") & (df["Best_Line"] >= 4.0) & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
-    best_assists = df[(df["Category"] == "Assists") & (df["Best_Line"] >= 4.0) & (~df["Player"].isin(hot_cold_players_list))].nlargest(1, "Edge")
+    best_points = df[(df["Category"] == "Points") & (df["Best_Line"] >= 18.5) & (~df["Player"].isin(excluded))].nlargest(1, "Edge")
+    best_rebounds = df[(df["Category"] == "Rebounds") & (df["Best_Line"] >= 4.0) & (~df["Player"].isin(excluded))].nlargest(1, "Edge")
+    best_assists = df[(df["Category"] == "Assists") & (df["Best_Line"] >= 4.0) & (~df["Player"].isin(excluded))].nlargest(1, "Edge")
+    best = pd.concat([best_points, best_rebounds, best_assists])
 
-    best_props = pd.concat([best_points, best_rebounds, best_assists])
-
-    # Display results (ensuring at least one per category)
-    for _, row in best_props.iterrows():
+    for _, row in best.iterrows():
         over_under, best_odds = get_best_bet(row)
-        if over_under != "No Bet":  # Ensure only strong bets are shown
-            st.write(f"• **{row['Player']} - {over_under} {row['Best_Line']} {row['Category']}**")
-            st.write(f"AI Projection: {row['AI_Projection']:.1f}")
-            st.write(f"L10 Avg: {row['L10']:.1f}, H2H Avg: {row['H2H']:.1f}, Best Odds: {best_odds}")
+        if over_under != "No Bet":
+            confidence = calculate_confidence(row, best_odds)
+            with st.expander(f"► {row['Player']} – {over_under} {row['Best_Line']} {row['Category']}"):
+                st.markdown(f"""
+                <div class='card-hover' style='background-color:#1a1a1a; padding:15px; border-radius:10px;'>
+                    <p>📊 <strong>Projection:</strong> {row['AI_Projection']:.1f}<br>
+                    🔟 <strong>L10:</strong> {row['L10']:.1f}<br>
+                    🤺 <strong>H2H:</strong> {row['H2H']:.1f}<br>
+                    💰 <strong>Odds:</strong> {best_odds}</p>
+                </div>
+                """, unsafe_allow_html=True)
+                st.progress(confidence)
+                st.write(f"Confidence: {confidence}%")
 
+# AI 2-MANS
 def generate_ai_2mans():
     st.title("🤖 AI 2-MANS")
+    filtered = df[(df["Category"].isin(["Rebounds", "Assists"])) & (df["Best_Line"] >= 4)]
+    pairs, attempts = [], 0
 
-    # Filter for Rebounds & Assists only, ensuring Best_Line is at least 4
-    df_filtered = df[(df["Category"].isin(["Rebounds", "Assists"])) & (df["Best_Line"] >= 4)]
+    while len(pairs) < 3 and len(filtered) > 1 and attempts < 10:
+        p1 = filtered.sample(1).iloc[0]
+        filtered = filtered[filtered["Player"] != p1["Player"]]
+        if get_best_bet(p1)[0].lower() == "fade": continue
+        if len(filtered) > 0:
+            p2 = filtered.sample(1).iloc[0]
+            filtered = filtered[filtered["Player"] != p2["Player"]]
+            if get_best_bet(p2)[0].lower() != "fade":
+                pairs.append((p1, p2))
+        attempts += 1
 
-    pairs = []
-    attempts = 0  # Prevent infinite loops
+    while len(pairs) < 3 and not filtered.empty:
+        p = filtered.sample(1).iloc[0]
+        filtered = filtered[filtered["Player"] != p["Player"]]
+        if get_best_bet(p)[0].lower() != "fade":
+            pairs.append((p, None))
 
-    while len(pairs) < 3 and len(df_filtered) > 1 and attempts < 10:
-        player1 = df_filtered.sample(1).iloc[0]
-        df_filtered = df_filtered[df_filtered["Player"] != player1["Player"]]
-
-        p1_bet, p1_odds = get_best_bet(player1)
-        if p1_bet == "No Bet" or p1_bet.lower() == "fade":
-            continue  # Skip players with No Bet or Fade
-
-        if len(df_filtered) > 0:
-            player2 = df_filtered.sample(1).iloc[0]
-            df_filtered = df_filtered[df_filtered["Player"] != player2["Player"]]
-
-            p2_bet, p2_odds = get_best_bet(player2)
-            if p2_bet != "No Bet" and p2_bet.lower() != "fade":
-                pairs.append((player1, player2))
-
-        attempts += 1  # Track number of tries
-
-    # If fewer than 3 pairs were found, fill the rest with any available bets
-    while len(pairs) < 3 and not df_filtered.empty:
-        player = df_filtered.sample(1).iloc[0]
-        df_filtered = df_filtered[df_filtered["Player"] != player["Player"]]
-
-        p_bet, p_odds = get_best_bet(player)
-        if p_bet != "No Bet" and p_bet.lower() != "fade":
-            pairs.append((player, None))  # Single player added if no pair found
-
-    for i, pair in enumerate(pairs, start=1):
+    for i, pair in enumerate(pairs, 1):
         st.subheader(f"SLIP {i}")
-
         if pair[1] is None:
-            player = pair[0]
-            bet, odds = get_best_bet(player)
-            st.write(f"• **{player['Player']} - {bet} {player['Best_Line']} {player['Category']}**")
-            st.write(f"📊 Odds: **{odds}**, Projection: **{player['AI_Projection']:.1f}**, L10 Avg: **{player['L10']:.1f}**, 23/24 H2H: **{player['H2H']:.1f}**")
+            p = pair[0]
+            b, o = get_best_bet(p)
+            conf = calculate_confidence(p, o)
+            with st.expander(f"🎯 {p['Player']} – {b} {p['Best_Line']} {p['Category']}"):
+                st.markdown(f"""<div class='card-hover' style='background-color:#1a1a1a; padding:15px; border-radius:10px;'>
+                <p>📊 <strong>Projection:</strong> {p['AI_Projection']:.1f}<br>🔟 L10: {p['L10']:.1f}<br> 🤺 H2H: {p['H2H']:.1f}<br>💰 Odds: {o}</p></div>""", unsafe_allow_html=True)
+                st.progress(conf)
+                st.write(f"Confidence: {conf}%")
         else:
-            player1, player2 = pair
-            p1_bet, p1_odds = get_best_bet(player1)
-            p2_bet, p2_odds = get_best_bet(player2)
+            p1, p2 = pair
+            b1, o1 = get_best_bet(p1)
+            b2, o2 = get_best_bet(p2)
+            conf1 = calculate_confidence(p1, o1)
+            conf2 = calculate_confidence(p2, o2)
+            with st.expander(f"► {p1['Player']} + {p2['Player']}"):
+                st.markdown(f"""<div class='card-hover' style='background-color:#1a1a1a; padding:15px; border-radius:10px;'>
+                <p><strong>{p1['Player']} – {b1} {p1['Best_Line']} {p1['Category']}</strong><br>📊 {p1['AI_Projection']:.1f}, 🔟 {p1['L10']:.1f}, 🤺 {p1['H2H']:.1f}, 💰 {o1}</p><br>
+                <p><strong>{p2['Player']} – {b2} {p2['Best_Line']} {p2['Category']}</strong><br>📊 {p2['AI_Projection']:.1f}, 🔟 {p2['L10']:.1f}, 🤺 {p2['H2H']:.1f}, 💰 {o2}</p></div>""", unsafe_allow_html=True)
+                st.progress(conf1)
+                st.write(f"Confidence: {conf1}%")
+                st.progress(conf2)
+                st.write(f"Confidence: {conf2}%")
 
-            st.write(f"• **{player1['Player']} - {p1_bet} {player1['Best_Line']} {player1['Category']}**")
-            st.write(f"• **{player2['Player']} - {p2_bet} {player2['Best_Line']} {player2['Category']}**")
-            st.write(f"📊 Odds: **{p1_odds}**, Projection: **{player1['AI_Projection']:.1f}**, L10 Avg: **{player1['L10']:.1f}**, 23/24 H2H: **{player1['H2H']:.1f}**")
-            st.write(f"📊 Odds: **{p2_odds}**, Projection: **{player2['AI_Projection']:.1f}**, L10 Avg: **{player2['L10']:.1f}**, 23/24 H2H: **{player2['H2H']:.1f}**")
-        st.write("---")
-
-# --- CS2 PLAYER SEARCH ---
+# CS2 SEARCH
 def cs2_player_search():
     st.title("🎮 CS2 SEARCH")
-
-    player_name = st.text_input("Enter Player Name:")
-
-    if player_name:
-        player_data = df_cs2[df_cs2["Player"].str.contains(player_name, case=False, na=False)]
-
-        if player_data.empty:
-            st.write("❌ No CS2 player found. Check the name and try again.")
+    name = st.text_input("Enter Player Name:")
+    if name:
+        data = df_cs2[df_cs2["Player"].str.contains(name, case=False, na=False)]
+        if data.empty:
+            st.write("❌ No CS2 player found.")
         else:
-            kills = player_data[player_data["Player"].str.endswith("(K)")]
-            headshots = player_data[~player_data["Player"].str.endswith("(K)")]
-
-            st.write(f"**{player_name}**")
+            kills = data[data["Player"].str.endswith("(K)")]
+            hs = data[~data["Player"].str.endswith("(K)")]
+            st.write(f"**{name}**")
             if not kills.empty:
                 st.write(f"🔫 Kills: Avg {kills.iloc[0]['Average']:.1f}, Line {kills.iloc[0]['Line']}")
-            if not headshots.empty:
-                st.write(f"👤 Headshots: Avg {headshots.iloc[0]['Average']:.1f}, Line {headshots.iloc[0]['Line']}")
+            if not hs.empty:
+                st.write(f"👤 Headshots: Avg {hs.iloc[0]['Average']:.1f}, Line {hs.iloc[0]['Line']}")
 
-# --- STREAMLIT NAVIGATION ---
+# --- NAVIGATION ---
 menu = st.sidebar.radio("📂 Select Page", ["NBA Search", "Hot & Cold", "Value Props", "AI 2-Mans", "CS2 Search"])
-
 if menu == "NBA Search":
     player_search()
 elif menu == "Hot & Cold":
@@ -261,15 +243,12 @@ elif menu == "AI 2-Mans":
 elif menu == "CS2 Search":
     cs2_player_search()
 
-# Footer (Added at the bottom)
-st.markdown(
-    """
+# --- Footer ---
+st.markdown("""
     <hr>
     <p style="text-align: center; font-size: 12px; color: gray;">
         Sharing this site and data will result in immediate loss of access with no refund.<br>
         Questions?:<br>
         X: @SolarJenda | Discord: SolarJenda
     </p>
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
