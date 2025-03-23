@@ -1,10 +1,20 @@
-
 # Force update
 import streamlit as st
 import pandas as pd
 import random
 
-# Hide Streamlit default UI
+# Google Fonts - Roboto
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+html, body, [class*="css"] {
+    font-family: 'Roboto', sans-serif;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# Hide Streamlit default UI + custom hover
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
@@ -18,6 +28,7 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 # Custom styling
 st.markdown("""
