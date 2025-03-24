@@ -82,7 +82,6 @@ def process_players(file_path):
 
     today_matchups = get_today_matchups()
 
-    # Prepare separate data lists for each category
     points_data, rebounds_data, assists_data = [], [], []
 
     for name in player_names:
@@ -109,35 +108,36 @@ def process_players(file_path):
 
         h2h_stats = fetch_h2h_avg(player_id, opponent_abbr)
 
-        # Append Points data
+        # Clearly include "Opponent" column now:
         points_data.append({
             "Player": name,
+            "Opponent": opponent_abbr,
             "L10_PTS": l10_stats["L10_PTS"],
             "H2H_PTS": h2h_stats["H2H_PTS"],
         })
 
-        # Append Rebounds data
         rebounds_data.append({
             "Player": name,
+            "Opponent": opponent_abbr,
             "L10_REB": l10_stats["L10_REB"],
             "H2H_REB": h2h_stats["H2H_REB"],
         })
 
-        # Append Assists data
         assists_data.append({
             "Player": name,
+            "Opponent": opponent_abbr,
             "L10_AST": l10_stats["L10_AST"],
             "H2H_AST": h2h_stats["H2H_AST"],
         })
 
         time.sleep(1.5)
 
-    # Save each CSV clearly separated by category
+    # Saving with the new "Opponent" column included
     pd.DataFrame(points_data).to_csv("Player_Points_L10_H2H.csv", index=False)
     pd.DataFrame(rebounds_data).to_csv("Player_Rebounds_L10_H2H.csv", index=False)
     pd.DataFrame(assists_data).to_csv("Player_Assists_L10_H2H.csv", index=False)
 
-    print("✅ All data successfully saved!")
+    print("✅ All data successfully saved with Opponent info!")
 
 if __name__ == "__main__":
     process_players("players.txt")

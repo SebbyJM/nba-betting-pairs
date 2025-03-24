@@ -1,6 +1,6 @@
 import pandas as pd
 
-# Corrected file paths for L10 + H2H data
+# Updated file paths for L10 + H2H data (now includes Opponent)
 l10_h2h_files = {
     "POINTS": "Player_Points_L10_H2H.csv",
     "REBOUNDS": "Player_Rebounds_L10_H2H.csv",
@@ -24,7 +24,7 @@ output_files = {
 # Merge each category separately
 for category in ["POINTS", "REBOUNDS", "ASSISTS"]:
     try:
-        # Load L10 + H2H Data
+        # Load L10 + H2H Data (includes Opponent now)
         l10_h2h_df = pd.read_csv(l10_h2h_files[category])
 
         # Load Cleaned Odds Data
