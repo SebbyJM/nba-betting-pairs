@@ -175,26 +175,68 @@ def hot_cold_players():
                 st.write(f"**{row['Player']}** ({row['Best_Line']} {cat})")
                 st.write(explain(row, False))
 
+def convert_odds(odds_str):
+    try:
+        odds = int(odds_str)
+        if odds < 0:
+            return abs(odds)  # -130 becomes 130
+        else:
+            return 100 - odds  # +110 becomes -10 (less favorable)
+    except:
+        return 0  # default/fallback if odds are invalid
+        
+
 def best_props():
     st.title("💰 VALUE PROPS")
 
+    # Step 1: Exclude players with extreme odds (top 3 over, bottom 3 under)
     excluded = pd.concat([
         df.nlargest(3, "Best_Over_Odds"),
         df.nsmallest(3, "Best_Under_Odds")
     ])["Player"].unique()
 
-    # Exclude top 5 defensive matchups (lowest ranks = toughest)
-    df_filtered = df[~df["DEF RTG RANK"].le(5, fill_value=False)]
+    # Step 2: Include all matchups (don't filter top defenses out)
+    df_filtered = df.copy()
 
-    best_points = df_filtered[(df_filtered["Category"] == "Points") & (df_filtered["Best_Line"] >= 20.5) & (~df_filtered["Player"].isin(excluded))].nlargest(1, "Edge")
-    best_rebounds = df_filtered[(df_filtered["Category"] == "Rebounds") & (df_filtered["Best_Line"] >= 4.0) & (~df_filtered["Player"].isin(excluded))].nlargest(1, "Edge")
-    best_assists = df_filtered[(df_filtered["Category"] == "Assists") & (df_filtered["Best_Line"] >= 4.0) & (~df_filtered["Player"].isin(excluded))].nlargest(1, "Edge")
+    # Step 3: Add Odds Strength and Combined Value Score
+    df_filtered["Odds_Score"] = df_filtered.apply(
+        lambda row: convert_odds(get_best_bet(row)[1]), axis=1
+    )
+    df_filtered["Value_Score"] = df_filtered["Edge"] + (df_filtered["Odds_Score"] / 100)
+
+    # Step 4: Select top props per category based on Value Score
+    best_points = df_filtered[
+        (df_filtered["Category"] == "Points") &
+        (df_filtered["Best_Line"] >= 18.5) &
+        (~df_filtered["Player"].isin(excluded))
+    ].nlargest(1, "Value_Score")
+
+    best_rebounds = df_filtered[
+        (df_filtered["Category"] == "Rebounds") &
+        (df_filtered["Best_Line"] >= 3.5) &
+        (~df_filtered["Player"].isin(excluded))
+    ].nlargest(1, "Value_Score")
+
+    best_assists = df_filtered[
+        (df_filtered["Category"] == "Assists") &
+        (df_filtered["Best_Line"] >= 4.0) &
+        (~df_filtered["Player"].isin(excluded))
+    ].nlargest(1, "Value_Score")
+
     best = pd.concat([best_points, best_rebounds, best_assists])
 
+    # Step 5: Display picks with confidence & breakdown
     for _, row in best.iterrows():
         over_under, best_odds = get_best_bet(row)
         if over_under != "Fade":
             confidence = calculate_confidence(row, best_odds)
+
+            # Flag and penalize tough matchups
+            matchup_rank = row["DEF RTG RANK"]
+            tough_matchup = matchup_rank <= 5
+            if tough_matchup:
+                confidence = max(confidence - 15, 0)  # subtract 15% confidence
+
             with st.expander(f"► {row['Player']} – {over_under} {row['Best_Line']} {row['Category']}"):
                 st.markdown(f"""
                 <div class='card-hover' style='background-color:#1a1a1a; padding:15px; border-radius:10px;'>
