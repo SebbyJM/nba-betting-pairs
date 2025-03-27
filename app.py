@@ -206,11 +206,12 @@ def best_props():
     selected_players = []
     used_opponents = []
 
-    # Step 3: Best Points prop
+    # Step 3: Best Points prop (excluding tough matchups)
     best_points = df_filtered[
         (df_filtered["Category"] == "Points") &
         (df_filtered["Best_Line"] >= 18.5) &
         (df_filtered["Best_Over_Odds"] <= -115) &
+        (df_filtered["DEF RTG RANK"] > 5) &  # ✅ avoid top 5 toughest defenses
         (~df_filtered["Player"].isin(excluded_top_odds)) &
         (~df_filtered["Player"].isin(selected_players)) &
         (~df_filtered["Opponent"].isin(used_opponents))
@@ -219,11 +220,12 @@ def best_props():
     selected_players += best_points["Player"].tolist()
     used_opponents += best_points["Opponent"].tolist()
 
-    # Step 4: Best Rebounds prop
+    # Step 4: Best Rebounds prop (excluding tough matchups)
     best_rebounds = df_filtered[
         (df_filtered["Category"] == "Rebounds") &
         (df_filtered["Best_Line"] >= 3.5) &
         (df_filtered["Best_Over_Odds"] <= -115) &
+        (df_filtered["DEF RTG RANK"] > 5) &  # ✅ avoid top 5 toughest defenses
         (~df_filtered["Player"].isin(excluded_top_odds)) &
         (~df_filtered["Player"].isin(selected_players)) &
         (~df_filtered["Opponent"].isin(used_opponents))
@@ -232,11 +234,12 @@ def best_props():
     selected_players += best_rebounds["Player"].tolist()
     used_opponents += best_rebounds["Opponent"].tolist()
 
-    # Step 5: Best Assists prop
+    # Step 5: Best Assists prop (excluding tough matchups)
     best_assists = df_filtered[
         (df_filtered["Category"] == "Assists") &
         (df_filtered["Best_Line"] >= 4.0) &
         (df_filtered["Best_Over_Odds"] <= -115) &
+        (df_filtered["DEF RTG RANK"] > 5) &  # ✅ avoid top 5 toughest defenses
         (~df_filtered["Player"].isin(excluded_top_odds)) &
         (~df_filtered["Player"].isin(selected_players)) &
         (~df_filtered["Opponent"].isin(used_opponents))
@@ -250,7 +253,7 @@ def best_props():
         if over_under != "Fade":
             confidence = calculate_confidence(row, best_odds)
 
-            # Penalize tough matchups
+            # Penalize tough matchups just in case one slips through
             tough_matchup = row["DEF RTG RANK"] <= 5
             if tough_matchup:
                 confidence = max(confidence - 15, 0)
@@ -266,7 +269,6 @@ def best_props():
                 </div>""", unsafe_allow_html=True)
                 st.progress(confidence)
                 st.write(f"Confidence: {confidence}%")
-
 
 # AI 2-MANS (updated with defensive matchups)
 

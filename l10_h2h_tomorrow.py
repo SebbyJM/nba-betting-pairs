@@ -21,18 +21,17 @@ def get_player_id(player_name):
             return player['id']
     return None
 
-def get_tomorrow_matchups():
-    tomorrow = (datetime.today() + timedelta(days=1)).strftime('%m/%d/%Y')
-    print(f"Fetching matchups for {tomorrow}...")  # Debugging
-    scoreboard = scoreboardv2.ScoreboardV2(game_date=tomorrow, headers=HEADERS)
-    games = scoreboard.get_normalized_dict().get("GameHeader", [])
+def get_today_matchups(tomorrow=False):
+    date_to_use = datetime.today() + timedelta(days=1) if tomorrow else datetime.today()
+    game_date = date_to_use.strftime('%m/%d/%Y')
+    
+    scoreboard = scoreboardv2.ScoreboardV2(game_date=game_date, headers=HEADERS)
+    games = scoreboard.get_normalized_dict()["GameHeader"]
 
     matchups = {}
     for game in games:
         matchups[game["HOME_TEAM_ID"]] = game["VISITOR_TEAM_ID"]
         matchups[game["VISITOR_TEAM_ID"]] = game["HOME_TEAM_ID"]
-    
-    print(f"Matchups found: {matchups}")  # Debugging
     return matchups
 
 def get_team_abbreviation(team_id):
@@ -83,9 +82,8 @@ def process_players(file_path):
     with open(file_path, 'r') as file:
         player_names = [line.strip() for line in file]
 
-    tomorrow_matchups = get_tomorrow_matchups()
+    today_matchups = get_today_matchups(tomorrow=True)  # ✅ Get tomorrow's games
 
-    # Prepare separate data lists for each category
     points_data, rebounds_data, assists_data = [], [], []
 
     for name in player_names:
@@ -103,45 +101,43 @@ def process_players(file_path):
 
         team_id = l10_stats["Team_ID"]
 
-        if team_id not in tomorrow_matchups:
+        if team_id not in today_matchups:
             print(f"⚠️ {name} has no game tomorrow.")
             continue
 
-        opponent_team_id = tomorrow_matchups[team_id]
+        opponent_team_id = today_matchups[team_id]
         opponent_abbr = get_team_abbreviation(opponent_team_id)
 
         h2h_stats = fetch_h2h_avg(player_id, opponent_abbr)
 
-        # Append Points data
         points_data.append({
             "Player": name,
+            "Opponent": opponent_abbr,
             "L10_PTS": l10_stats["L10_PTS"],
             "H2H_PTS": h2h_stats["H2H_PTS"],
         })
 
-        # Append Rebounds data
         rebounds_data.append({
             "Player": name,
+            "Opponent": opponent_abbr,
             "L10_REB": l10_stats["L10_REB"],
             "H2H_REB": h2h_stats["H2H_REB"],
         })
 
-        # Append Assists data
         assists_data.append({
             "Player": name,
+            "Opponent": opponent_abbr,
             "L10_AST": l10_stats["L10_AST"],
             "H2H_AST": h2h_stats["H2H_AST"],
         })
 
         time.sleep(1.5)
 
-    # Save each CSV clearly separated by category
     pd.DataFrame(points_data).to_csv("Player_Points_L10_H2H.csv", index=False)
     pd.DataFrame(rebounds_data).to_csv("Player_Rebounds_L10_H2H.csv", index=False)
     pd.DataFrame(assists_data).to_csv("Player_Assists_L10_H2H.csv", index=False)
 
-    print("✅ Tomorrow's data successfully saved!")
+    print("✅ All data successfully saved with Opponent info!")
 
 if __name__ == "__main__":
     process_players("players.txt")
-
