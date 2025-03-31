@@ -209,9 +209,9 @@ def best_props():
     # Step 3: Best Points prop (excluding tough matchups)
     best_points = df_filtered[
         (df_filtered["Category"] == "Points") &
-        (df_filtered["Best_Line"] >= 18.5) &
-        (df_filtered["Best_Over_Odds"] <= -115) &
-        (df_filtered["DEF RTG RANK"] > 5) &  # ✅ avoid top 5 toughest defenses
+        (df_filtered["Best_Line"] >= 20.5) &
+        (df_filtered["Best_Over_Odds"] <= -120) &
+        (df_filtered["DEF RTG RANK"] > 7) &  # ✅ avoid top 5 toughest defenses
         (~df_filtered["Player"].isin(excluded_top_odds)) &
         (~df_filtered["Player"].isin(selected_players)) &
         (~df_filtered["Opponent"].isin(used_opponents))
@@ -223,9 +223,9 @@ def best_props():
     # Step 4: Best Rebounds prop (excluding tough matchups)
     best_rebounds = df_filtered[
         (df_filtered["Category"] == "Rebounds") &
-        (df_filtered["Best_Line"] >= 3.5) &
-        (df_filtered["Best_Over_Odds"] <= -115) &
-        (df_filtered["DEF RTG RANK"] > 5) &  # ✅ avoid top 5 toughest defenses
+        (df_filtered["Best_Line"] >= 4.0) &
+        (df_filtered["Best_Over_Odds"] <= -140) &
+        (df_filtered["DEF RTG RANK"] > 7) &  # ✅ avoid top 5 toughest defenses
         (~df_filtered["Player"].isin(excluded_top_odds)) &
         (~df_filtered["Player"].isin(selected_players)) &
         (~df_filtered["Opponent"].isin(used_opponents))
@@ -238,8 +238,8 @@ def best_props():
     best_assists = df_filtered[
         (df_filtered["Category"] == "Assists") &
         (df_filtered["Best_Line"] >= 4.0) &
-        (df_filtered["Best_Over_Odds"] <= -115) &
-        (df_filtered["DEF RTG RANK"] > 5) &  # ✅ avoid top 5 toughest defenses
+        (df_filtered["Best_Over_Odds"] <= -140) &
+        (df_filtered["DEF RTG RANK"] > 7) &  # ✅ avoid top 5 toughest defenses
         (~df_filtered["Player"].isin(excluded_top_odds)) &
         (~df_filtered["Player"].isin(selected_players)) &
         (~df_filtered["Opponent"].isin(used_opponents))
