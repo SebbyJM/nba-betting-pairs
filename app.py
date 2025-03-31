@@ -2,37 +2,44 @@ import streamlit as st
 import pandas as pd
 import random
 
-# 🎨 Custom Fonts: Orbitron + Roboto
+# 🎨 Fonts: Orbitron (titles), Roboto (content)
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;500;700&display=swap');
+
 html, body, [class*="css"] {
     font-family: 'Roboto', sans-serif;
 }
+
+/* Titles use Orbitron, smaller for mobile */
 h1, h2, h3 {
     font-family: 'Orbitron', sans-serif !important;
 }
-</style>
-""", unsafe_allow_html=True)
 
-# 🛑 Hide default UI + Custom Hover
-st.markdown("""
-<style>
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
-
-.card-hover:hover {
-    box-shadow: 0 0 25px #89CFF0;
-    transform: scale(1.015);
-    transition: all 0.2s ease-in-out;
+h1 {
+    font-size: 32px;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 5px;
 }
-</style>
-""", unsafe_allow_html=True)
 
-# 🌌 Full Custom Styling
-st.markdown("""
-<style>
+@media (max-width: 768px) {
+    h1 {
+        font-size: 24px !important;
+    }
+    .ai-subtitle {
+        font-size: 12px !important;
+    }
+}
+
+/* Hover and layout tweaks */
+.card-hover:hover {
+    box-shadow: 0 0 20px #89CFF0;
+    transform: scale(1.01);
+    transition: 0.2s ease-in-out;
+}
+
+/* App background & form elements */
 body, .stApp {
     background-color: black;
     color: white;
@@ -59,16 +66,14 @@ hr {
 </style>
 """, unsafe_allow_html=True)
 
-# 🚀 AI Branding Title
+# 🚀 Responsive Title + AI Subtitle
 st.markdown("""
-<h1 style="text-align: center; font-weight: bold; font-family: 'Orbitron', sans-serif; font-size: 42px;">
+<h1>
     <span style="color: white;">CHEAT THE BOOKS</span> 
     <span style="color: #89CFF0;">AI</span>
 </h1>
-<div style="text-align:center; margin-top:-10px;">
-    <span style="color:gray; font-family:monospace; font-size:14px;">
-        ⌛ Generating high-value props using machine learning...
-    </span>
+<div class="ai-subtitle" style="text-align:center; margin-top:-10px; font-family:monospace; font-size:13px; color:gray;">
+    ⌛ Generating high-value props using machine learning...
 </div>
 """, unsafe_allow_html=True)
 
