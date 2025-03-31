@@ -141,7 +141,7 @@ def player_search():
         else:
             player = player_data.iloc[0]["Player"]
             st.markdown("----")
-            st.markdown(f"### 🎯 {player}")
+            st.markdown(f"### {player}")
 
             for cat in ["Points", "Rebounds", "Assists"]:
                 stat = player_data[player_data["Category"] == cat]
@@ -151,8 +151,8 @@ def player_search():
                     tough_matchup = row["DEF RTG RANK"] <= 5 if not pd.isna(row["DEF RTG RANK"]) else False
 
                     st.markdown(f"**{cat}:** {over_under} {row['Best_Line']}  \n"
-                                f" Projection: {row['AI_Projection']:.1f} | "
-                                f" L10: {row['L10']:.1f} | Odds: {best_odds}  \n"
+                                f" ► Projection: {row['AI_Projection']:.1f} | "
+                                f" ► L10: {row['L10']:.1f} | ► Odds: {best_odds}  \n"
                                 f" {matchup_note(row)}")
 
 # HOT & COLD (unchanged clearly)
