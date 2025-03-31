@@ -139,18 +139,21 @@ def player_search():
         if player_data.empty:
             st.write("❌ No player found.")
         else:
-            for _, row in player_data.iterrows():
-                over_under, best_odds = get_best_bet(row)
-                tough_matchup = row["DEF RTG RANK"] <= 5 if not pd.isna(row["DEF RTG RANK"]) else False
+            player = player_data.iloc[0]["Player"]
+            st.markdown("----")
+            st.markdown(f"### 🎯 {player}")
 
-                st.markdown("----")
-                st.markdown(f"### ► {row['Player']}")
-                st.markdown(f"**Pick:** {over_under} {row['Best_Line']} {row['Category']}")
-                st.markdown(f"**AI Projection:** {row['AI_Projection']:.1f}")
-                st.markdown(f"**L10 Avg:** {row['L10']:.1f}")
-                st.markdown(f"**Best Odds:** {best_odds}")
-                st.markdown(f"**Matchup:** {matchup_note(row)}")
+            for cat in ["Points", "Rebounds", "Assists"]:
+                stat = player_data[player_data["Category"] == cat]
+                if not stat.empty:
+                    row = stat.iloc[0]
+                    over_under, best_odds = get_best_bet(row)
+                    tough_matchup = row["DEF RTG RANK"] <= 5 if not pd.isna(row["DEF RTG RANK"]) else False
 
+                    st.markdown(f"**{cat}:** {over_under} {row['Best_Line']}  \n"
+                                f"🔮 Projection: {row['AI_Projection']:.1f} | "
+                                f"📊 L10: {row['L10']:.1f} | 💰 Odds: {best_odds}  \n"
+                                f"🛡️ {matchup_note(row)}{' 🔥 Tough Matchup' if tough_matchup else ''}")
 
 # HOT & COLD (unchanged clearly)
 def hot_cold_players():
