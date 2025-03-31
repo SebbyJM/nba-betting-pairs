@@ -129,21 +129,28 @@ def matchup_note(row):
     else:
         return f"Neutral matchup ({team} #{rank})"
 
-# NBA SEARCH (updated clearly)
 def player_search():
     st.title("🏀 NBA SEARCH")
     player_name = st.text_input(" Enter Player Name:")
+
     if player_name:
         player_data = df[df["Player"].str.lower() == player_name.lower()]
+        
         if player_data.empty:
             st.write("❌ No player found.")
         else:
             for _, row in player_data.iterrows():
                 over_under, best_odds = get_best_bet(row)
-                st.write(f"**{row['Player']}** - {over_under} {row['Best_Line']} {row['Category']}")
-                st.write(f"AI Projection: {row['AI_Projection']:.1f}")
-                st.write(f"L10 Avg: {row['L10']:.1f}, H2H Avg: {row['H2H']:.1f}, Best Odds: {best_odds}")
-                st.write(f"🛡️ Matchup: {matchup_note(row)}")
+                tough_matchup = row["DEF RTG RANK"] <= 5 if not pd.isna(row["DEF RTG RANK"]) else False
+
+                st.markdown("----")
+                st.markdown(f"### ► {row['Player']}")
+                st.markdown(f"**Pick:** {over_under} {row['Best_Line']} {row['Category']}")
+                st.markdown(f"**AI Projection:** {row['AI_Projection']:.1f}")
+                st.markdown(f"**L10 Avg:** {row['L10']:.1f}")
+                st.markdown(f"**Best Odds:** {best_odds}")
+                st.markdown(f"**Matchup:** {matchup_note(row)}")
+
 
 # HOT & COLD (unchanged clearly)
 def hot_cold_players():
