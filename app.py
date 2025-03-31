@@ -1,70 +1,75 @@
-# Force update
 import streamlit as st
 import pandas as pd
 import random
 
-# Google Fonts - Roboto
+# 🎨 Custom Fonts: Orbitron + Roboto
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;500;700&display=swap');
 html, body, [class*="css"] {
     font-family: 'Roboto', sans-serif;
+}
+h1, h2, h3 {
+    font-family: 'Orbitron', sans-serif !important;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# Hide Streamlit default UI + custom hover
+# 🛑 Hide default UI + Custom Hover
 st.markdown("""
-    <style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    .card-hover:hover {
-        box-shadow: 0 0 15px #89CFF0;
-        transform: scale(1.01);
-        transition: 0.2s ease-in-out;
-    }
-    </style>
+<style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+
+.card-hover:hover {
+    box-shadow: 0 0 25px #89CFF0;
+    transform: scale(1.015);
+    transition: all 0.2s ease-in-out;
+}
+</style>
 """, unsafe_allow_html=True)
 
-# Custom styling
+# 🌌 Full Custom Styling
 st.markdown("""
-    <style>
-        body, .stApp {
-            background-color: black;
-            color: white;
-        }
-        .title-text {
-            text-align: center;
-            font-weight: bold;
-            font-size: 36px;
-        }
-        .css-1d391kg, .css-18e3th9 {
-            background-color: #111;
-        }
-        .stTextInput, .stButton>button {
-            border-radius: 4px;
-            border: 3px solid black;
-            background-color: black;
-            color: gray;
-        }
-        .stButton>button:hover {
-            background-color: #89CFF0;
-            color: black;
-        }
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            color: gray;
-        }
-    </style>
+<style>
+body, .stApp {
+    background-color: black;
+    color: white;
+}
+.css-1d391kg, .css-18e3th9 {
+    background-color: #111;
+}
+.stTextInput, .stButton>button {
+    border-radius: 4px;
+    border: 3px solid black;
+    background-color: black;
+    color: gray;
+}
+.stButton>button:hover {
+    background-color: #89CFF0;
+    color: black;
+}
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, #89CFF0, transparent);
+    margin: 25px 0;
+}
+</style>
 """, unsafe_allow_html=True)
 
+# 🚀 AI Branding Title
 st.markdown("""
-    <h1 style="text-align: center; font-weight: bold;">
-        <span style="color: white;">CHEAT THE BOOKS</span> 
-        <span style="color: #89CFF0;">AI</span>
-    </h1>
+<h1 style="text-align: center; font-weight: bold; font-family: 'Orbitron', sans-serif; font-size: 42px;">
+    <span style="color: white;">CHEAT THE BOOKS</span> 
+    <span style="color: #89CFF0;">AI</span>
+</h1>
+<div style="text-align:center; margin-top:-10px;">
+    <span style="color:gray; font-family:monospace; font-size:14px;">
+        ⌛ Generating high-value props using machine learning...
+    </span>
+</div>
 """, unsafe_allow_html=True)
 
 # Load data
