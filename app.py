@@ -185,7 +185,7 @@ def is_on_cold_streak(row):
 # Will send final completed script in parts if too large
 
 def player_search():
-    st.title("🏀 NBA SEARCH")
+    st.title("NBA SEARCH")
 
     all_players = sorted(df["Player"].unique())
     typed = st.text_input("Start typing a player name (e.g. 'john'):").strip()
@@ -223,7 +223,7 @@ def player_search():
 
 
 def best_props():
-    st.title("💰 NBA VALUE")
+    st.title("NBA VALUE")
 
     excluded_top_odds = pd.concat([
         df.nlargest(3, "Best_Over_Odds"),
@@ -297,7 +297,7 @@ def best_props():
             st.progress(ai_prob / 100)
             st.write(f"AI Probability: {ai_prob}%")
 def generate_ai_2mans():
-    st.title("🤖 NBA AI")
+    st.title("NBA AI")
 
     st.sidebar.header('🤖 AI PLAYS FILTERS')
     num_players = st.sidebar.selectbox('Players per slip', [1, 2, 3, 4], index=1)
@@ -378,7 +378,7 @@ def generate_ai_2mans():
                 st.write(f"AI Probability: {ai_prob}%")
 
 def lol_value_props():
-    st.title("🎮 LoL VALUE")
+    st.title("LoL VALUE")
 
     lol_df = pd.read_csv("SOLAR AI LoL - PROJ.csv")
 
@@ -432,15 +432,90 @@ def lol_value_props():
                 </div>
             ''', unsafe_allow_html=True)
 
-menu = st.sidebar.radio("👇🏻Select Page", ["NBA Search", "NBA Value", "NBA AI", "LoL Value"])
-if menu == "NBA Search":
-    player_search()
-elif menu == "NBA Value":
-    best_props()
-elif menu == "NBA AI":
-    generate_ai_2mans()
-elif menu == "LoL Value":
-    lol_value_props()
+def lol_2mans():
+    st.title("LoL AI")
+
+    df_lol = pd.read_csv("SOLAR AI LoL - PROJ.csv")
+
+    all_rows = []
+    for _, row in df_lol.iterrows():
+        # Kills
+        if pd.notna(row["KILLS"]) and pd.notna(row["K PROJ."]):
+            diff = row["K PROJ."] - row["KILLS"]
+            all_rows.append({
+                "Player": row["PLAYER"],
+                "Team": row["TEAM"],
+                "Line": row["KILLS"],
+                "Proj": row["K PROJ."],
+                "Type": "Kills",
+                "Diff": diff,
+                "TeamOdds": row["TEAM ODDS"],
+                "Bet": "Over" if diff > 0 else "Under"
+            })
+        # Assists
+        if pd.notna(row["ASSISTS"]) and pd.notna(row["A PROJ."]):
+            diff = row["A PROJ."] - row["ASSISTS"]
+            all_rows.append({
+                "Player": row["PLAYER"],
+                "Team": row["TEAM"],
+                "Line": row["ASSISTS"],
+                "Proj": row["A PROJ."],
+                "Type": "Assists",
+                "Diff": diff,
+                "TeamOdds": row["TEAM ODDS"],
+                "Bet": "Over" if diff > 0 else "Under"
+            })
+
+    df_combined = pd.DataFrame(all_rows)
+
+    # Sort by absolute difference and mix top 5 Over and top 5 Under
+    top_over = df_combined[df_combined["Diff"] > 0].nlargest(5, "Diff")
+    top_under = df_combined[df_combined["Diff"] < 0].nsmallest(5, "Diff")
+    top_picks = pd.concat([top_over, top_under]).sample(frac=1).reset_index(drop=True)
+
+    if top_picks.empty:
+        st.warning("No 2-man candidates found.")
+        return
+
+    # Group in slips of 2
+    num_slips = min(3, len(top_picks) // 2)
+    for i in range(num_slips):
+        st.subheader(f"SLIP {i+1}")
+        slip = top_picks.iloc[i*2:i*2+2]
+        for _, row in slip.iterrows():
+            with st.expander(f"► {row['Player']} – {row['Type']}"):
+                st.markdown(f'''
+                    <div class='card-hover' style='background-color:#1a1a1a; padding:15px; border-radius:10px;'>
+                        📊 <strong>Line:</strong> {row['Line']}<br>
+                        🤖 <strong>Projection:</strong> {row['Proj']:.2f}<br>
+                        📈 <strong>Difference:</strong> {row['Diff']:.2f}<br>
+                        🏅 <strong>Team:</strong> {row['Team']} ({row['TeamOdds']})<br>
+                        📉 <strong>Bet:</strong> {row['Bet']}
+                    </div>
+                ''', unsafe_allow_html=True)
+
+
+# Sidebar navigation with single section active at a time
+section = st.sidebar.radio("Select Section", ["🏀 NBA", "🎮 League of Legends"])
+
+if section == "🏀 NBA":
+    nba_page = st.sidebar.radio("NBA Pages", ["Search", "Value", "AI"], key="nba_menu")
+
+    if nba_page == "Search":
+        player_search()
+    elif nba_page == "Value":
+        best_props()
+    elif nba_page == "AI":
+        generate_ai_2mans()
+
+elif section == "🎮 League of Legends":
+    lol_page = st.sidebar.radio("LoL Pages", ["Value", "AI"], key="lol_menu")
+
+    if lol_page == "Value":
+        lol_value_props()
+    elif lol_page == "AI":
+        lol_2mans()
+
 
 # --- Footer ---
 st.markdown("""
