@@ -264,7 +264,7 @@ def best_props():
     selected_players += best_points["Player"].tolist()
     used_opponents += best_points["Opponent"].tolist()
 
-    best_rebounds = select_best("Rebounds", 4.0, -140, 7)
+    best_rebounds = select_best("Rebounds", 4.0, -140, 5)
     selected_players += best_rebounds["Player"].tolist()
     used_opponents += best_rebounds["Opponent"].tolist()
 
