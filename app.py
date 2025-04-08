@@ -268,7 +268,7 @@ def best_props():
     selected_players += best_rebounds["Player"].tolist()
     used_opponents += best_rebounds["Opponent"].tolist()
 
-    best_assists = select_best("Assists", 4.0, -130, 5)
+    best_assists = select_best("Assists", 4.0, -140, 5)
 
     best = pd.concat([best_points, best_rebounds, best_assists])
 
