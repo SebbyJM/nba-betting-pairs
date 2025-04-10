@@ -260,7 +260,7 @@ def best_props():
             (~df_filtered["Opponent"].isin(used_opponents))
         ].nlargest(1, "Value_Score")
 
-    best_points = select_best("Points", 18.5, -120, 7)
+    best_points = select_best("Points", 17.5, -110, 1)
     selected_players += best_points["Player"].tolist()
     used_opponents += best_points["Opponent"].tolist()
 
