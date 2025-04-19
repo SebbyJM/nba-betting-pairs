@@ -1,35 +1,66 @@
-Alec Burks
-Andrew Wiggins
-Anthony Davis
-Bam Adebayo
-Brandon Williams
-Caleb Martin
-Caris LeVert
-Daniel Gafford
-Dante Exum
-Davion Mitchell
-Dereck Lively II
+A.J. Green
+Aaron Gordon
+Aaron Nesmith
+Andrew Nembhard
+Anthony Edwards
+Ausar Thompson
+Austin Reaves
+Bennedict Mathurin
+Bobby Portis
+Bogdan Bogdanovic
+Brook Lopez
+Cade Cunningham
+Cameron Payne
+Christian Braun
+Dennis Schroder
+Derrick Jones
 description
-Desmond Bane
-Duncan Robinson
-Dyson Daniels
-Georges Niang
-Ja Morant
-Jaren Jackson Jr
-John Konchar
-Kel'el Ware
-Klay Thompson
-Kyle Anderson
-Luke Kennard
-Max Christie
-Mouhamed Gueye
-Naji Marshall
-Onyeka Okongwu
-P.J. Washington
-Santi Aldama
-Scotty Pippen Jr
-Terance Mann
-Trae Young
-Tyler Herro
-Zaccharie Risacher
-Zach Edey
+Donte DiVincenzo
+Dorian Finney-Smith
+Gabe Vincent
+Gary Trent Jr
+Giannis Antetokounmpo
+Isaiah Stewart II
+Ivica Zubac
+Jaden McDaniels
+Jalen Brunson
+Jalen Duren
+Jamal Murray
+James Harden
+Jarred Vanderbilt
+Jaxson Hayes
+Josh Hart
+Julius Randle
+Karl-Anthony Towns
+Kawhi Leonard
+Kevin Porter Jr.
+Kris Dunn
+Kyle Kuzma
+LeBron James
+Luka Doncic
+Malik Beasley
+Michael Porter Jr
+Mikal Bridges
+Mike Conley
+Miles McBride
+Mitchell Robinson
+Myles Turner
+Naz Reid
+Nickeil Alexander-Walker
+Nicolas Batum
+Nikola Jokic
+Norman Powell
+Obi Toppin
+OG Anunoby
+Pascal Siakam
+Peyton Watson
+Rudy Gobert
+Rui Hachimura
+Russell Westbrook
+Ryan Rollins
+T.J. McConnell
+Taurean Prince
+Thomas Bryant
+Tim Hardaway Jr
+Tobias Harris
+Tyrese Haliburton
