@@ -1,67 +1,30 @@
-Aaron Wiggins
-Al Horford
-Alec Burks
-Alex Caruso
-Alperen Sengun
-Amen Thompson
-Andrew Wiggins
-Anthony Black
-Bam Adebayo
-Brandin Podziemski
-Buddy Hield
-Cason Wallace
-Chet Holmgren
-Cole Anthony
-Cory Joseph
-Darius Garland
-Davion Mitchell
-De'Andre Hunter
-Derrick White
+Aaron Gordon
+Ausar Thompson
+Bogdan Bogdanovic
+Cade Cunningham
+Cameron Payne
+Christian Braun
+Dennis Schroder
+Derrick Jones
 description
-Desmond Bane
-Dillon Brooks
-Donovan Mitchell
-Draymond Green
-Duncan Robinson
-Evan Mobley
-Franz Wagner
-Fred VanVleet
-Gary Harris
-Gary Payton II
-Haywood Highsmith
-Isaac Okoro
-Isaiah Hartenstein
-Isaiah Joe
-Ja Morant
-Jabari Smith Jr
-Jalen Green
-Jalen Williams
-Jaren Jackson Jr
-Jarrett Allen
-Jaylen Brown
-Jayson Tatum
-Jimmy Butler
-John Konchar
-Jonathan Isaac
-Jrue Holiday
-Kel'el Ware
-Kentavious Caldwell-Pope
-Kevon Looney
-Kristaps Porzingis
-Kyle Anderson
-Luguentz Dort
-Max Strus
-Moses Moody
-Paolo Banchero
-Payton Pritchard
-Quinten Post
-Sam Hauser
-Santi Aldama
-Scotty Pippen Jr
-Shai Gilgeous-Alexander
-Stephen Curry
-Tari Eason
-Ty Jerome
-Tyler Herro
-Wendell Carter Jr
-Zach Edey
+Ivica Zubac
+Jalen Brunson
+Jalen Duren
+Jamal Murray
+James Harden
+Josh Hart
+Karl-Anthony Towns
+Kawhi Leonard
+Kris Dunn
+Malik Beasley
+Michael Porter Jr
+Mikal Bridges
+Miles McBride
+Mitchell Robinson
+Nicolas Batum
+Nikola Jokic
+Norman Powell
+OG Anunoby
+Russell Westbrook
+Tim Hardaway Jr
+Tobias Harris
