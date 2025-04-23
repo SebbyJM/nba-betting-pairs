@@ -1,50 +1,48 @@
-A.J. Green
-Aaron Nesmith
-Aaron Wiggins
-Alex Caruso
-Andrew Nembhard
-Anthony Edwards
-Austin Reaves
-Bennedict Mathurin
-Bobby Portis
-Brook Lopez
-Cason Wallace
-Chet Holmgren
-Damian Lillard
+Al Horford
+Alec Burks
+Alperen Sengun
+Amen Thompson
+Andrew Wiggins
+Anthony Black
+Bam Adebayo
+Brandin Podziemski
+Buddy Hield
+Cole Anthony
+Cory Joseph
+Darius Garland
+Davion Mitchell
+De'Andre Hunter
+Derrick White
 description
-Desmond Bane
-Donte DiVincenzo
-Dorian Finney-Smith
-Gabe Vincent
-Gary Trent Jr
-Giannis Antetokounmpo
-Isaiah Hartenstein
-Isaiah Joe
-Ja Morant
-Jaden McDaniels
-Jalen Williams
-Jaren Jackson Jr
-Jaxson Hayes
-John Konchar
-Julius Randle
-Kevin Porter Jr.
-Kyle Kuzma
-LeBron James
-Luguentz Dort
-Luka Doncic
-Marvin Bagley III
-Mike Conley
-Myles Turner
-Naz Reid
-Nickeil Alexander-Walker
-Obi Toppin
-Pascal Siakam
-Rudy Gobert
-Rui Hachimura
-Santi Aldama
-Scotty Pippen Jr
-Shai Gilgeous-Alexander
-T.J. McConnell
-Taurean Prince
-Tyrese Haliburton
-Zach Edey
+Dillon Brooks
+Donovan Mitchell
+Draymond Green
+Duncan Robinson
+Evan Mobley
+Franz Wagner
+Fred VanVleet
+Gary Payton II
+Haywood Highsmith
+Isaac Okoro
+Jabari Smith Jr
+Jalen Green
+Jarrett Allen
+Jaylen Brown
+Jimmy Butler
+Jonathan Isaac
+Jrue Holiday
+Kel'el Ware
+Kentavious Caldwell-Pope
+Kristaps Porzingis
+Luke Kornet
+Max Strus
+Moses Moody
+Paolo Banchero
+Payton Pritchard
+Sam Hauser
+Sam Merrill
+Stephen Curry
+Tari Eason
+Ty Jerome
+Tyler Herro
+Wendell Carter Jr
