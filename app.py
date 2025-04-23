@@ -260,15 +260,15 @@ def best_props():
             (~df_filtered["Opponent"].isin(used_opponents))
         ].nlargest(1, "Value_Score")
 
-    best_points = select_best("Points", 17.5, -110, 1)
+    best_points = select_best("Points", 17.5, -110, 10)
     selected_players += best_points["Player"].tolist()
     used_opponents += best_points["Opponent"].tolist()
 
-    best_rebounds = select_best("Rebounds", 4.0, -140, 5)
+    best_rebounds = select_best("Rebounds", 4.0, -140, 10)
     selected_players += best_rebounds["Player"].tolist()
     used_opponents += best_rebounds["Opponent"].tolist()
 
-    best_assists = select_best("Assists", 4.0, -140, 1)
+    best_assists = select_best("Assists", 4.0, -135, 10)
 
     best = pd.concat([best_points, best_rebounds, best_assists])
 
