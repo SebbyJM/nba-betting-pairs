@@ -290,7 +290,7 @@ def best_props():
                     📊 <strong>Projection:</strong> {row['AI_Projection']:.1f}<br>
                     🔟 <strong>L10:</strong> {row['L10']:.1f}<br>
                     💰 <strong>Odds:</strong> {best_odds}<br>
-                    🛡️ <strong>Matchup:</strong> {matchup_note(row)}{' 🔥 Tough Matchup!' if tough_matchup else ''}<br>
+                    🛡️ <strong>Matchup:</strong> {matchup_note(row)}<br>
                     {warning}
                 </div>
             ''', unsafe_allow_html=True)
