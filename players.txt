@@ -1,58 +1,60 @@
-Aaron Gordon
-Aaron Wiggins
-Alex Caruso
-Alperen Sengun
-Amen Thompson
-Andrew Wiggins
-Bam Adebayo
-Bogdan Bogdanovic
-Brandin Podziemski
-Cason Wallace
-Chet Holmgren
-Christian Braun
-Darius Garland
-Davion Mitchell
-De'Andre Hunter
-Derrick Jones
+A.J. Green
+Aaron Nesmith
+Al Horford
+Andrew Nembhard
+Anthony Black
+Anthony Edwards
+Ausar Thompson
+Austin Reaves
+Bennedict Mathurin
+Bobby Portis
+Brook Lopez
+Cade Cunningham
+Cory Joseph
+Damian Lillard
+Dennis Schroder
+Derrick White
 description
-Desmond Bane
-Dillon Brooks
-Donovan Mitchell
-Draymond Green
-Duncan Robinson
-Evan Mobley
-Fred VanVleet
-Haywood Highsmith
-Isaiah Hartenstein
-Isaiah Joe
-Ivica Zubac
-Jabari Smith Jr
-Jalen Green
-Jalen Williams
-Jamal Murray
-James Harden
-Jaren Jackson Jr
-Jarrett Allen
-Jimmy Butler
-Kawhi Leonard
-Kel'el Ware
-Kris Dunn
-Luguentz Dort
-Luke Kennard
-Max Strus
-Michael Porter Jr
-Moses Moody
-Nicolas Batum
-Nikola Jokic
-Nikola Jovic
-Norman Powell
-Sam Merrill
-Santi Aldama
-Scotty Pippen Jr
-Shai Gilgeous-Alexander
-Stephen Curry
-Steven Adams
-Tari Eason
-Ty Jerome
-Tyler Herro
-Zach Edey
+Donte DiVincenzo
+Dorian Finney-Smith
+Franz Wagner
+Gary Trent Jr
+Giannis Antetokounmpo
+Jaden McDaniels
+Jalen Brunson
+Jalen Duren
+Jaxson Hayes
+Jaylen Brown
+Jayson Tatum
+Jonathan Isaac
+Josh Hart
+Julius Randle
+Karl-Anthony Towns
+Kentavious Caldwell-Pope
+Kevin Porter Jr.
+Kristaps Porzingis
+Kyle Kuzma
+LeBron James
+Luka Doncic
+Malik Beasley
+Mikal Bridges
+Mike Conley
+Miles McBride
+Mitchell Robinson
+Myles Turner
+Naz Reid
+Nickeil Alexander-Walker
+Obi Toppin
+OG Anunoby
+Paolo Banchero
+Pascal Siakam
+Paul Reed Jr
+Payton Pritchard
+Ron Holland
+Rudy Gobert
+Rui Hachimura
+T.J. McConnell
+Tim Hardaway Jr
+Tobias Harris
+Tyrese Haliburton
+Wendell Carter Jr
