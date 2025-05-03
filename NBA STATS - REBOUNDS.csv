@@ -1,155 +1,133 @@
-Over,Alperen Sengun,100,10.5
-Under,Alperen Sengun,-132,10.5
-Over,Alperen Sengun,-105,10.5
-Under,Alperen Sengun,-125,10.5
-Over,Alperen Sengun,-115,10.5
-Under,Alperen Sengun,-112,10.5
-Over,Alperen Sengun,-115,10.5
-Under,Alperen Sengun,-115,10.5
-Over,Alperen Sengun,-115,10.5
-Under,Alperen Sengun,-115,10.5
-Over,Alperen Sengun,-115,10.5
-Under,Alperen Sengun,-115,10.5
-Over,Amen Thompson,-140,6.5
-Under,Amen Thompson,106,6.5
-Over,Amen Thompson,-145,6.5
-Under,Amen Thompson,114,6.5
-Over,Amen Thompson,-141,6.5
-Under,Amen Thompson,108,6.5
-Over,Amen Thompson,-145,6.5
-Under,Amen Thompson,105,6.5
-Over,Amen Thompson,-145,6.5
-Under,Amen Thompson,110,6.5
-Over,Amen Thompson,-137,6.5
-Under,Amen Thompson,102,6.5
-Over,Brandin Podziemski,102,5.5
-Under,Brandin Podziemski,-136,5.5
-Over,Brandin Podziemski,105,5.5
-Under,Brandin Podziemski,-135,5.5
-Over,Brandin Podziemski,110,5.5
-Under,Brandin Podziemski,-143,5.5
-Over,Brandin Podziemski,100,5.5
-Under,Brandin Podziemski,-135,5.5
-Over,Brandin Podziemski,120,5.5
-Under,Brandin Podziemski,-160,5.5
-Over,Brandin Podziemski,105,5.5
-Under,Brandin Podziemski,-139,5.5
-Over,Buddy Hield,128,3.5
-Under,Buddy Hield,-172,3.5
-Over,Buddy Hield,135,3.5
-Under,Buddy Hield,-175,3.5
-Over,Buddy Hield,132,3.5
-Under,Buddy Hield,-172,3.5
-Over,Buddy Hield,130,3.5
-Under,Buddy Hield,-175,3.5
-Over,Buddy Hield,117,3.5
-Under,Buddy Hield,-157,3.5
+Over,Aaron Gordon,-145,5.5
+Under,Aaron Gordon,114,5.5
+Over,Aaron Gordon,-150,5.5
+Under,Aaron Gordon,110,5.5
+Over,Aaron Gordon,-152,5.5
+Under,Aaron Gordon,117,5.5
+Over,Aaron Gordon,118,6.5
+Under,Aaron Gordon,-158,6.5
+Over,Aaron Gordon,-130,5.5
+Under,Aaron Gordon,-103,5.5
+Over,Aaron Gordon,-160,5.5
+Under,Aaron Gordon,120,5.5
+Over,Bogdan Bogdanovic,-154,1.5
+Under,Bogdan Bogdanovic,120,1.5
+Over,Bogdan Bogdanovic,-185,1.5
+Under,Bogdan Bogdanovic,135,1.5
+Over,Bogdan Bogdanovic,-169,1.5
+Under,Bogdan Bogdanovic,130,1.5
+Over,Christian Braun,100,5.5
+Under,Christian Braun,-130,5.5
+Over,Christian Braun,100,5.5
+Under,Christian Braun,-135,5.5
+Over,Christian Braun,104,5.5
+Under,Christian Braun,-135,5.5
+Over,Christian Braun,110,5.5
+Under,Christian Braun,-146,5.5
+Over,Christian Braun,112,5.5
+Under,Christian Braun,-148,5.5
+Over,Christian Braun,100,5.5
+Under,Christian Braun,-130,5.5
+Over,Derrick Jones,-180,1.5
+Under,Derrick Jones,140,1.5
+Over,Derrick Jones,-175,1.5
+Under,Derrick Jones,130,1.5
+Over,Derrick Jones,-172,1.5
+Under,Derrick Jones,133,1.5
 label,description,price,point
-Over,Dillon Brooks,116,3.5
-Under,Dillon Brooks,-154,3.5
-Over,Dillon Brooks,110,3.5
-Under,Dillon Brooks,-140,3.5
-Over,Dillon Brooks,110,3.5
-Under,Dillon Brooks,-143,3.5
-Over,Dillon Brooks,100,3.5
-Under,Dillon Brooks,-130,3.5
-Over,Dillon Brooks,107,3.5
-Under,Dillon Brooks,-143,3.5
-Over,Draymond Green,-122,6.5
-Under,Draymond Green,-108,6.5
-Over,Draymond Green,-130,6.5
-Under,Draymond Green,100,6.5
-Over,Draymond Green,-132,6.5
-Under,Draymond Green,102,6.5
-Over,Draymond Green,-140,6.5
-Under,Draymond Green,105,6.5
-Over,Draymond Green,-145,6.5
-Under,Draymond Green,110,6.5
-Over,Draymond Green,-129,6.5
-Under,Draymond Green,-104,6.5
-Over,Fred VanVleet,-172,2.5
-Under,Fred VanVleet,128,2.5
-Over,Fred VanVleet,-166,2.5
-Under,Fred VanVleet,130,2.5
-Over,Fred VanVleet,-164,2.5
-Under,Fred VanVleet,126,2.5
-Over,Fred VanVleet,-160,2.5
-Under,Fred VanVleet,120,2.5
-Over,Fred VanVleet,-175,2.5
-Under,Fred VanVleet,128,2.5
-Over,Gary Payton II,-102,2.5
-Under,Gary Payton II,-130,2.5
-Over,Gary Payton II,-110,2.5
-Under,Gary Payton II,-120,2.5
-Over,Gary Payton II,-110,2.5
-Under,Gary Payton II,-118,2.5
-Over,Gary Payton II,-118,2.5
-Under,Gary Payton II,-110,2.5
-Over,Jabari Smith Jr,-115,4.5
-Under,Jabari Smith Jr,-115,4.5
-Over,Jabari Smith Jr,-110,4.5
-Under,Jabari Smith Jr,-118,4.5
-Over,Jabari Smith Jr,-120,4.5
-Under,Jabari Smith Jr,-110,4.5
-Over,Jalen Green,114,4.5
-Under,Jalen Green,-152,4.5
-Over,Jalen Green,100,4.5
-Under,Jalen Green,-130,4.5
-Over,Jalen Green,124,4.5
-Under,Jalen Green,-161,4.5
-Over,Jalen Green,100,4.5
-Under,Jalen Green,-135,4.5
-Over,Jalen Green,-114,4.5
-Under,Jalen Green,-117,4.5
-Over,Jimmy Butler,-130,5.5
-Under,Jimmy Butler,-102,5.5
-Over,Jimmy Butler,-130,5.5
-Under,Jimmy Butler,100,5.5
-Over,Jimmy Butler,-135,5.5
-Under,Jimmy Butler,104,5.5
-Over,Jimmy Butler,-125,5.5
-Under,Jimmy Butler,-110,5.5
-Over,Jimmy Butler,-150,5.5
-Under,Jimmy Butler,115,5.5
-Over,Jimmy Butler,-139,5.5
-Under,Jimmy Butler,105,5.5
-Over,Kevon Looney,-150,2.5
-Under,Kevon Looney,110,2.5
-Over,Moses Moody,107,2.5
-Under,Moses Moody,-139,2.5
-Over,Moses Moody,105,2.5
-Under,Moses Moody,-145,2.5
-Over,Quinten Post,-132,3.5
-Under,Quinten Post,100,3.5
-Over,Quinten Post,-135,3.5
-Under,Quinten Post,105,3.5
-Over,Quinten Post,-133,3.5
-Under,Quinten Post,103,3.5
-Over,Quinten Post,-140,3.5
-Under,Quinten Post,105,3.5
-Over,Stephen Curry,-158,4.5
-Under,Stephen Curry,118,4.5
-Over,Stephen Curry,-145,4.5
-Under,Stephen Curry,114,4.5
-Over,Stephen Curry,-149,4.5
-Under,Stephen Curry,115,4.5
-Over,Stephen Curry,-135,4.5
-Under,Stephen Curry,100,4.5
-Over,Stephen Curry,-143,4.5
-Under,Stephen Curry,108,4.5
-Over,Steven Adams,114,7.5
-Under,Steven Adams,-152,7.5
-Over,Steven Adams,-140,6.5
-Under,Steven Adams,110,6.5
-Over,Steven Adams,-137,6.5
-Under,Steven Adams,106,6.5
-Over,Steven Adams,-130,6.5
-Under,Steven Adams,-105,6.5
-Over,Steven Adams,-145,6.5
-Under,Steven Adams,110,6.5
-Over,Tari Eason,114,4.5
-Under,Tari Eason,-145,4.5
-Over,Tari Eason,110,4.5
-Under,Tari Eason,-143,4.5
-Over,Tari Eason,105,4.5
-Under,Tari Eason,-140,4.5
+Over,Ivica Zubac,-120,11.5
+Under,Ivica Zubac,-110,11.5
+Over,Ivica Zubac,-125,11.5
+Under,Ivica Zubac,-105,11.5
+Over,Ivica Zubac,-119,11.5
+Under,Ivica Zubac,-109,11.5
+Over,Ivica Zubac,-122,11.5
+Under,Ivica Zubac,-110,11.5
+Over,Ivica Zubac,-115,11.5
+Under,Ivica Zubac,-115,11.5
+Over,Ivica Zubac,-120,11.5
+Under,Ivica Zubac,-110,11.5
+Over,Jamal Murray,-115,4.5
+Under,Jamal Murray,-115,4.5
+Over,Jamal Murray,100,4.5
+Under,Jamal Murray,-135,4.5
+Over,Jamal Murray,-120,4.5
+Under,Jamal Murray,-108,4.5
+Over,Jamal Murray,-106,4.5
+Under,Jamal Murray,-125,4.5
+Over,Jamal Murray,102,4.5
+Under,Jamal Murray,-134,4.5
+Over,James Harden,-130,5.5
+Under,James Harden,100,5.5
+Over,James Harden,-155,5.5
+Under,James Harden,115,5.5
+Over,James Harden,-125,5.5
+Under,James Harden,-103,5.5
+Over,James Harden,-118,5.5
+Under,James Harden,-112,5.5
+Over,James Harden,-120,5.5
+Under,James Harden,-112,5.5
+Over,James Harden,-135,5.5
+Under,James Harden,105,5.5
+Over,Kawhi Leonard,-115,7.5
+Under,Kawhi Leonard,-115,7.5
+Over,Kawhi Leonard,-115,7.5
+Under,Kawhi Leonard,-115,7.5
+Over,Kawhi Leonard,-127,7.5
+Under,Kawhi Leonard,-102,7.5
+Over,Kawhi Leonard,-114,7.5
+Under,Kawhi Leonard,-114,7.5
+Over,Kawhi Leonard,100,7.5
+Under,Kawhi Leonard,-132,7.5
+Over,Kawhi Leonard,-115,7.5
+Under,Kawhi Leonard,-115,7.5
+Over,Michael Porter Jr,-154,4.5
+Under,Michael Porter Jr,120,4.5
+Over,Michael Porter Jr,-155,4.5
+Under,Michael Porter Jr,115,4.5
+Over,Michael Porter Jr,-130,4.5
+Under,Michael Porter Jr,100,4.5
+Over,Michael Porter Jr,-158,4.5
+Under,Michael Porter Jr,118,4.5
+Over,Michael Porter Jr,-152,4.5
+Under,Michael Porter Jr,115,4.5
+Over,Michael Porter Jr,-150,4.5
+Under,Michael Porter Jr,115,4.5
+Over,Nicolas Batum,124,4.5
+Under,Nicolas Batum,-160,4.5
+Over,Nicolas Batum,100,4.5
+Under,Nicolas Batum,-135,4.5
+Over,Nicolas Batum,113,4.5
+Under,Nicolas Batum,-147,4.5
+Over,Nicolas Batum,114,4.5
+Under,Nicolas Batum,-152,4.5
+Over,Nikola Jokic,-130,12.5
+Under,Nikola Jokic,100,12.5
+Over,Nikola Jokic,-110,12.5
+Under,Nikola Jokic,-118,12.5
+Over,Nikola Jokic,-119,12.5
+Under,Nikola Jokic,-109,12.5
+Over,Nikola Jokic,-114,12.5
+Under,Nikola Jokic,-114,12.5
+Over,Nikola Jokic,-120,12.5
+Under,Nikola Jokic,-110,12.5
+Over,Nikola Jokic,-125,12.5
+Under,Nikola Jokic,-105,12.5
+Over,Norman Powell,-125,2.5
+Under,Norman Powell,-105,2.5
+Over,Norman Powell,-110,2.5
+Under,Norman Powell,-120,2.5
+Over,Norman Powell,-106,2.5
+Under,Norman Powell,-122,2.5
+Over,Norman Powell,-102,2.5
+Under,Norman Powell,-130,2.5
+Over,Norman Powell,105,2.5
+Under,Norman Powell,-139,2.5
+Over,Russell Westbrook,-115,4.5
+Under,Russell Westbrook,-115,4.5
+Over,Russell Westbrook,-115,4.5
+Under,Russell Westbrook,-118,4.5
+Over,Russell Westbrook,-110,4.5
+Under,Russell Westbrook,-118,4.5
+Over,Russell Westbrook,-106,4.5
+Under,Russell Westbrook,-125,4.5
