@@ -1,15 +1,34 @@
-Aaron Gordon
-Bogdan Bogdanovic
-Christian Braun
-Derrick Jones
+Aaron Nesmith
+Alperen Sengun
+Amen Thompson
+Andrew Nembhard
+Bennedict Mathurin
+Brandin Podziemski
+Buddy Hield
+De'Andre Hunter
+Dean Wade
 description
-Ivica Zubac
-Jamal Murray
-James Harden
-Kawhi Leonard
-Kris Dunn
-Michael Porter Jr
-Nicolas Batum
-Nikola Jokic
-Norman Powell
-Russell Westbrook
+Dillon Brooks
+Donovan Mitchell
+Draymond Green
+Evan Mobley
+Fred VanVleet
+Gary Payton II
+Jabari Smith Jr
+Jalen Green
+Jarace Walker
+Jarrett Allen
+Jimmy Butler
+Max Strus
+Moses Moody
+Myles Turner
+Obi Toppin
+Pascal Siakam
+Quinten Post
+Sam Merrill
+Stephen Curry
+Steven Adams
+T.J. McConnell
+Tari Eason
+Ty Jerome
+Tyrese Haliburton
